@@ -22,15 +22,17 @@ The project utilizes Wireshark to monitor and analyze network traffic in real ti
 
 -**1. Real-Time Network Traffic Analysis**:
 The project utilizes Wireshark to monitor and analyze network traffic in real time while users are playing games. It identifies which IP addresses are being used, the destination servers, and which ports are active during the connection.
-  /**1. Gerçek Zamanlı Ağ Trafiği Analizi**:
+-**1. Gerçek Zamanlı Ağ Trafiği Analizi**:
 Proje, Wireshark ile kullanıcıların oynadığı oyunlar sırasında gerçekleşen ağ trafiğini gerçek zamanlı olarak izleyerek, istemci-sunucu arasındaki veri alışverişini analiz eder. Bu sayede hangi IP adreslerinin kullanıldığı, hangi sunuculara bağlanıldığı ve veri iletimi için hangi portların açık olduğu tespit edilir.
 
 -**2. Game-Specific Traffic Identification**:
-The project is capable of distinguishing traffic patterns specific to different games. By recognizing unique data packet structures, protocols, or server communication behaviors, it provides detailed insights into how each game connects and communicates over the network.  /**2. Oyunlara Özgü Trafik Tanıma**:
+The project is capable of distinguishing traffic patterns specific to different games. By recognizing unique data packet structures, protocols, or server communication behaviors, it provides detailed insights into how each game connects and communicates over the network.  
+-**2. Oyunlara Özgü Trafik Tanıma**:
 Proje, farklı oyunlara özgü ağ davranışlarını ayırt edebilir. Belirli oyunlara ait karakteristik veri paketleri, protokoller veya sunucu bağlantı desenleri tanımlanarak analiz detaylandırılır. Böylece oyunların bağlantı yapılarına dair özgün bilgiler elde edilir.
 
 -**3. Security and Performance Assessment**:
-Based on the collected IP, port, and server data, the project can offer evaluations related to network security and performance. It can determine which server regions players are connecting to, measure latency, and assess the overall efficiency and reliability of the game's network infrastructure. /**3. Güvenlik ve Performans Değerlendirmesi**:
+Based on the collected IP, port, and server data, the project can offer evaluations related to network security and performance. It can determine which server regions players are connecting to, measure latency, and assess the overall efficiency and reliability of the game's network infrastructure. 
+-**3. Güvenlik ve Performans Değerlendirmesi**:
 Elde edilen IP, port ve sunucu verileriyle, oyunların ağ güvenliği ve performansı hakkında çıkarımlar yapılabilir. Örneğin, oyuncuların hangi ülkedeki sunuculara bağlandığı, bağlantı süresi ve gecikmeler (latency) gibi metrikler üzerinden performans analizi yapılabilir.
 
 ---
