@@ -1,41 +1,43 @@
 <div align="center">
-  <img src="https://img.shields.io/github/languages/count/keyvanarasteh/Project?style=flat-square&color=blueviolet" alt="Language Count">
-  <img src="https://img.shields.io/github/languages/top/keyvanarasteh/Project?style=flat-square&color=1e90ff" alt="Top Language">
-  <img src="https://img.shields.io/github/last-commit/keyvanarasteh/Project?style=flat-square&color=ff69b4" alt="Last Commit">
-  <img src="https://img.shields.io/github/license/keyvanarasteh/Project?style=flat-square&color=yellow" alt="License">
+  <img src="https://img.shields.io/github/languages/count/EfeSidal/Oyuncavi?style=flat-square&color=blueviolet" alt="Language Count">
+  <img src="https://img.shields.io/github/languages/top/EfeSidal/Oyuncavi?style=flat-square&color=1e90ff" alt="Top Language">
+  <img src="https://img.shields.io/github/last-commit/EfeSidal/Oyuncavi?style=flat-square&color=ff69b4" alt="Last Commit">
+  <img src="https://img.shields.io/github/license/EfeSidal/Oyuncavi?style=flat-square&color=yellow" alt="License">
   <img src="https://img.shields.io/badge/Status-Active-green?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=flat-square" alt="Contributions">
 </div>
 
-# Project Name
-*Proje Adı*
+# Gamer Hunt Project (EN)
+*Oyuncu Avı* (turkce)
 
-A brief, engaging description of your project.  
-*Projenizin kısa ve ilgi çekici bir açıklaması.*
+In this project, we analyze the network connections of users in some games using wirehark and identify the IP addresses, servers and ports used. (EN)  
+*bu projede bazı oyunlardaki kullanıcıların ağ bağlantılarını wireshark kullanarak analiz edip, kullanılan IP adreslerini, sunucuları ve portları tespit edeceğim. (TR).*
 
 ---
 
 ## Features / *Özellikler*
 
-- **Feature 1:** Description of the feature.  
-  *Özellik 1: Özelliğin açıklaması.*
-- **Feature 2:** Another cool thing it does.  
-  *Özellik 2: Yaptığı başka bir harika şey.*
-- **Feature 3:** One more for good measure.  
-  *Özellik 3: Ve bir tane daha.*
-- Add more as they develop.  
-  *Geliştikçe daha fazla ekleyin.*
+**1. Real-Time Network Traffic Analysis**:
+The project utilizes Wireshark to monitor and analyze network traffic in real time while users are playing games. It identifies which IP addresses are being used, the destination servers, and which ports are active during the connection.
+
+-**1. Real-Time Network Traffic Analysis**:
+The project utilizes Wireshark to monitor and analyze network traffic in real time while users are playing games. It identifies which IP addresses are being used, the destination servers, and which ports are active during the connection.
+  /**1. Gerçek Zamanlı Ağ Trafiği Analizi**:
+Proje, Wireshark ile kullanıcıların oynadığı oyunlar sırasında gerçekleşen ağ trafiğini gerçek zamanlı olarak izleyerek, istemci-sunucu arasındaki veri alışverişini analiz eder. Bu sayede hangi IP adreslerinin kullanıldığı, hangi sunuculara bağlanıldığı ve veri iletimi için hangi portların açık olduğu tespit edilir.
+
+-**2. Game-Specific Traffic Identification**:
+The project is capable of distinguishing traffic patterns specific to different games. By recognizing unique data packet structures, protocols, or server communication behaviors, it provides detailed insights into how each game connects and communicates over the network.  /**2. Oyunlara Özgü Trafik Tanıma**:
+Proje, farklı oyunlara özgü ağ davranışlarını ayırt edebilir. Belirli oyunlara ait karakteristik veri paketleri, protokoller veya sunucu bağlantı desenleri tanımlanarak analiz detaylandırılır. Böylece oyunların bağlantı yapılarına dair özgün bilgiler elde edilir.
+
+-**3. Security and Performance Assessment**:
+Based on the collected IP, port, and server data, the project can offer evaluations related to network security and performance. It can determine which server regions players are connecting to, measure latency, and assess the overall efficiency and reliability of the game's network infrastructure. /**3. Güvenlik ve Performans Değerlendirmesi**:
+Elde edilen IP, port ve sunucu verileriyle, oyunların ağ güvenliği ve performansı hakkında çıkarımlar yapılabilir. Örneğin, oyuncuların hangi ülkedeki sunuculara bağlandığı, bağlantı süresi ve gecikmeler (latency) gibi metrikler üzerinden performans analizi yapılabilir.
 
 ---
 
 ## Team / *Ekip*
 
-- **219*****031** - Name Surname: *Role or Contribution*  
-  *Ad Soyad: Rolü veya Katkısı*
-- **Another Member** - Name Surname: *Role or Contribution*  
-  *Ad Soyad: Rolü veya Katkısı*
-- Add more members as needed.  
-  *Gerektiğinde daha fazla üye ekleyin.*
+-2420191004 -Efe Sidal: Project Owner/Proje Sahibi
 
 ---
 
@@ -121,23 +123,12 @@ Licensed under the [MIT License](LICENSE.md).
 
 ---
 
-## Acknowledgements / *Teşekkürler* (Optional)
-
-Thanks to:  
-- Awesome Library: For enabling X.  
-- Inspiration Source.  
-- Special thanks to...  
-
-*Teşekkürler: Harika kütüphaneler ve ilham kaynakları için.*
-
----
-
 ## Contact / *İletişim* (Optional)
 
-Project Maintainer: [Your Name/Org Name] - [your.email@example.com]  
+Project Maintainer: [Efe Sidal/Istinye University] - [sidalefe2005@gmail.com]  
 Found a bug? Open an issue.  
 
-*Proje Sorumlusu: [Adınız/Kuruluş Adınız] - [e-posta.adresiniz@ornek.com]. Hata bulursanız bir sorun bildirin.*
+*Proje Sorumlusu: [Efe Sidal/Istinye University] - [sidalefe2005@gmail.com]. Hata bulursanız bir sorun bildirin.*
 
 ---
 
