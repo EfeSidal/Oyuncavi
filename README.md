@@ -7,11 +7,11 @@
   <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=flat-square" alt="Contributions">
 </div>
 
-# Gamer Hunt Project (EN)
-*Oyuncu Avı* (turkce)
+# Gamer Hunt Project 
+*Oyuncu Avı*
 
-In this project, we analyze the network connections of users in some games using wirehark and identify the IP addresses, servers and ports used. (EN)  
-*bu projede bazı oyunlardaki kullanıcıların ağ bağlantılarını wireshark kullanarak analiz edip, kullanılan IP adreslerini, sunucuları ve portları tespit edeceğim. (TR).*
+In this project, we analyze the network connections of users in some games using wirehark and identify the IP addresses, servers and ports used.
+*bu projede bazı oyunlardaki kullanıcıların ağ bağlantılarını wireshark kullanarak analiz edip, kullanılan IP adreslerini, sunucuları ve portları tespit edeceğim.*
 
 ---
 
