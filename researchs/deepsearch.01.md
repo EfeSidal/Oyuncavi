@@ -2,11 +2,13 @@
 
 
 
-Bu proje, bir bilgisayar ağındaki yazılımcıları, ağ trafiği analiz aracı olan Wireshark kullanarak tespit etmeyi amaçlamaktadır. Temel hedef, yazılımcıların karakteristik ağ aktivitelerini (örneğin, Git/SSH kullanımı, IDE'ler ve kod editörlerinden kaynaklanan trafik, geliştirme/test sunucularına erişim, API test araçları trafiği, sanal makine/konteyner etkileşimleri ve özel port/protokol kullanımları) analiz ederek ayırt edici dijital izlerini belirlemektir. Proje kapsamında, bu özel trafik desenlerini etkin bir şekilde saptamak ve diğer ağ trafiğinden ayrıştırmak amacıyla hem canlı veri yakalama aşamasında (capture filters) hem de yakalanmış verilerin incelenmesi sırasında (display filters) kullanılacak kapsamlı ve özelleştirilmiş Wireshark filtreleri oluşturulacaktır. Bu filtreler, yazılımcılara özgü uygulamaların, servislerin ve davranış kalıplarının tespiti üzerine yoğunlaşarak, ağ üzerindeki yazılımcı varlığını ve faaliyetlerini yüksek doğrulukla belirlemeyi hedeflemektedir.
+Bu projede, çevrim içi oyun oynayan kullanıcıların ağ trafiği Wireshark aracı kullanılarak analiz edilmektedir. Oyun sırasında istemciden sunucuya gerçekleşen veri paketleri incelenerek, kullanılan IP adresleri, port numaraları ve bağlantı kurulan sunucular tespit edilir. Bu sayede oyunların kullandığı ağ altyapısı hakkında detaylı bilgi elde edilmekte ve olası güvenlik açıkları veya performans sorunları değerlendirilebilmektedir. Proje, ağ trafiği izleme ve analiz etme becerilerini geliştirmeyi amaçlamakta olup; siber güvenlik, tersine mühendislik ve oyun teknolojileri alanlarında uygulanabilir çıktılar sunmaktadır. Ayrıca, farklı oyun türleri için ağ davranışlarının karşılaştırılması da proje kapsamında gerçekleştirilebilir.
 
 
 
-**Görev:** 2025 yılı için [Developer Hunter, 'wireshark kullanarak yazilimcilari agda tesbit etmek (Yazilimci Avi)'] alanındaki en son ve en etkili ilk 10 tekniği/trendi derinlemesine araştır ve belirle.
+
+
+**Görev:** 2025 yılı için [oyuncu avı, örneğin: 'wireshark kullanarak oyuncuları agda tesbit etmek (oyuncu Avi)'] alanındaki en son ve en etkili ilk 10 tekniği/trendi derinlemesine araştır ve belirle.
 
 
 
@@ -40,12 +42,12 @@ Bu proje, bir bilgisayar ağındaki yazılımcıları, ağ trafiği analiz arac�
 
 **Örnek Alanlar (Projenize Göre Değiştirin):**
 
-- Yazılım Geliştirme Metodolojileri
+- Gerçek Zamanlı Veri İzleme ve Paket Analizi
 
-- Veri Bilimi ve Makine Öğrenimi Uygulamaları
+- Tersine Mühendislik ve Protokol Çözümleme
 
-- Blokzincir Teknolojileri
+- Etik Hackerlık ve Bilgi Toplama Teknikleri
 
-- Dijital Pazarlama Stratejileri
+- Ağ tabanlı oyun performans analizi
 
-- İnsan-Bilgisayar Etkileşimi Arayüzleri
+- Siber Güvenlik ve Ağ analizi
