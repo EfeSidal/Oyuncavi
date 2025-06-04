@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=flat-square" alt="Contributions">
 </div>
 
-# Gamer Hunt Project 
+# Gamer Hunt  
 *Oyuncu Avı*
 
 In this project, we analyze the network connections of users in some games using wirehark and identify the IP addresses, servers and ports used.
