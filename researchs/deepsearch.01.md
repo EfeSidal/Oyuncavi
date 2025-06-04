@@ -8,7 +8,7 @@ Bu projede, çevrim içi oyun oynayan kullanıcıların ağ trafiği Wireshark a
 
 
 
-**Görev:** 2025 yılı için [oyuncu avı, 'wireshark kullanarak oyuncuları agda tesbit etmek (oyuncu Avi)'] alanındaki en son ve en etkili ilk 10 tekniği/trendi derinlemesine araştır ve belirle.
+**Görev:** 2025 yılı için [oyuncu avı, 'wireshark kullanarak oyuncuları ağda tespit etmek (oyuncu Avi)'] alanındaki en son ve en etkili ilk 10 tekniği/trendi derinlemesine araştır ve belirle.
 
 
 
