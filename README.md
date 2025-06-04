@@ -11,7 +11,8 @@
 *Oyuncu Avı*
 
 In this project, we analyze the network connections of users in some games using wirehark and identify the IP addresses, servers and ports used.
-*bu projede bazı oyunlardaki kullanıcıların ağ bağlantılarını wireshark kullanarak analiz edip, kullanılan IP adreslerini, sunucuları ve portları tespit edeceğim.*
+
+*Bu projede bazı oyunlardaki kullanıcıların ağ bağlantılarını wireshark kullanarak analiz edip, kullanılan IP adreslerini, sunucuları ve portları tespit edeceğim.*
 
 ---
 
