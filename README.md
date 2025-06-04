@@ -17,11 +17,9 @@ In this project, we analyze the network connections of users in some games using
 
 ## Features / *Özellikler*
 
-**1. Real-Time Network Traffic Analysis**:
-The project utilizes Wireshark to monitor and analyze network traffic in real time while users are playing games. It identifies which IP addresses are being used, the destination servers, and which ports are active during the connection.
-
 -**1. Real-Time Network Traffic Analysis**:
 The project utilizes Wireshark to monitor and analyze network traffic in real time while users are playing games. It identifies which IP addresses are being used, the destination servers, and which ports are active during the connection.
+
 -**1. Gerçek Zamanlı Ağ Trafiği Analizi**:
 Proje, Wireshark ile kullanıcıların oynadığı oyunlar sırasında gerçekleşen ağ trafiğini gerçek zamanlı olarak izleyerek, istemci-sunucu arasındaki veri alışverişini analiz eder. Bu sayede hangi IP adreslerinin kullanıldığı, hangi sunuculara bağlanıldığı ve veri iletimi için hangi portların açık olduğu tespit edilir.
 
