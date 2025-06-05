@@ -1,8 +1,8 @@
-**Proje ve Hedefler ve Ozellikler:** 
+**Proje ve Hedefler ve Özellikler:** 
 
 
 
-Bu projede, çevrim içi oyun oynayan kullanıcıların ağ trafiği Wireshark aracı kullanılarak analiz edilmektedir. Oyun sırasında istemciden sunucuya gerçekleşen veri paketleri incelenerek, kullanılan IP adresleri, port numaraları ve bağlantı kurulan sunucular tespit edilir. Bu sayede oyunların kullandığı ağ altyapısı hakkında detaylı bilgi elde edilmekte ve olası güvenlik açıkları veya performans sorunları değerlendirilebilmektedir. Proje, ağ trafiği izleme ve analiz etme becerilerini geliştirmeyi amaçlamakta olup; siber güvenlik, tersine mühendislik ve oyun teknolojileri alanlarında uygulanabilir çıktılar sunmaktadır. Ayrıca, farklı oyun türleri için ağ davranışlarının karşılaştırılması da proje kapsamında gerçekleştirilebilir.
+Bu projede, çevrimiçi oyun oynayan kullanıcıların ağ trafiği Wireshark aracı kullanılarak analiz edilmektedir. Oyun sırasında istemciden sunucuya gerçekleşen veri paketleri incelenerek, kullanılan IP adresleri, port numaraları ve bağlantı kurulan sunucular tespit edilir. Bu sayede oyunların kullandığı ağ altyapısı hakkında detaylı bilgi elde edilmekte ve olası güvenlik açıkları veya performans sorunları değerlendirilebilmektedir. Proje, ağ trafiği izleme ve analiz etme becerilerini geliştirmeyi amaçlamakta olup; siber güvenlik, tersine mühendislik ve oyun teknolojileri alanlarında uygulanabilir çıktılar sunmaktadır. Ayrıca, farklı oyun türleri için ağ davranışlarının karşılaştırılması da proje kapsamında gerçekleştirilebilir.
 
 
 
