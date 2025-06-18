@@ -1,4 +1,4 @@
-# GROK THINK Yol Haritası
+Yol Haritası
 
 **Proje Ana Hedefi/Hedefleri:**\
 Çevrim içi oyunlarda oyuncu avı için en son ve en etkili 10 tekniği kullanarak, gelişmiş ağ trafiği analizi yoluyla kötü niyetli oyuncu davranışlarını tespit eden ve azaltan yenilikçi bir prototip geliştirmek.
