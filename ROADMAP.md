@@ -1,4 +1,4 @@
-Çevrim İçi Oyunlarda Oyuncu Avı için Ağ Trafiği Analizi Prototipi Geliştirme
+## Çevrimiçi Oyunlarda Oyuncu Avı için Ağ Trafiği Analizi Prototipi Geliştirme
 
 ## Giriş
 Bu yol haritası, çevrim içi oyunlarda kötü niyetli oyuncu davranışlarını tespit etmek ve azaltmak için ağ trafiği analizi yapan yenilikçi bir prototipin Python ile nasıl geliştirileceğini ve test edileceğini detaylı bir şekilde açıklar. Prototip, 2025’te etkili olan en son 10 tekniği (örn. YZ/ML tabanlı anomali tespiti, tersine mühendislik, ETA) kullanır. **Önemli Uyarı: Bu bilgiler yalnızca eğitim ve araştırma amaçlıdır. Yetkisiz kullanımı yasa dışı ve etik dışıdır. Herhangi bir ağda veya sistemde test yapmadan önce açık izin almanız zorunludur.**
