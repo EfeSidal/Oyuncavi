@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
-# Scapy'den ağ kartlarını çeken fonksiyonu ekledik
-from scapy.all import get_if_list
 from src.capture import start_sniffer
 from src.analysis import detect_anomalies
 from src.utils import get_ip_owner
@@ -15,6 +13,7 @@ st.set_page_config(
     page_icon="🎮"
 )
 
+# Protokol isimleri (Sayı yerine yazı çıksın diye)
 PROTOCOL_MAP = {
     6: "TCP",
     17: "UDP",
@@ -26,37 +25,20 @@ PROTOCOL_MAP = {
 st.sidebar.title("🛠️ Kontrol Paneli")
 st.sidebar.markdown("---")
 
-# --- YENİ EKLENEN KISIM: OTOMATİK AĞ LİSTESİ ---
-try:
-    # Bilgisayardaki ağ kartlarını otomatik bul
-    iface_list = get_if_list()
-    
-    # Eğer liste boş gelirse (Driver hatası vs.) manuel girişe düş
-    if not iface_list:
-        interface_name = st.sidebar.text_input("Ağ Arayüzü (Interface)", value="Wi-Fi")
-    else:
-        # Listeyi kullanıcıya göster
-        st.sidebar.success(f"✅ {len(iface_list)} Ağ Kartı Bulundu")
-        interface_name = st.sidebar.selectbox(
-            "Ağ Kartını Seç", 
-            iface_list, 
-            index=0,
-            help="İnternete bağlı olduğun kartı seç (Genelde Wi-Fi veya Ethernet)"
-        )
-except Exception as e:
-    st.sidebar.error("Kart listesi alınamadı, manuel giriniz.")
-    interface_name = st.sidebar.text_input("Ağ Arayüzü (Interface)", value="Wi-Fi")
-# -----------------------------------------------
+# ESKİ VE SAĞLAM YÖNTEM: Manuel Giriş
+st.sidebar.info("Ağ kartının ismini aşağıya yaz:")
+# Varsayılan değer 'Wi-Fi'. Eğer kablo kullanıyorsan buraya 'Ethernet' yazarsın.
+interface_name = st.sidebar.text_input("Ağ Arayüzü (Interface)", value="Wi-Fi")
 
 packet_count = st.sidebar.slider("Paket Sayısı (Her Tarama)", min_value=100, max_value=2000, value=500, step=100)
 
 st.sidebar.markdown("---")
 # Mod Seçimi
 auto_refresh = st.sidebar.checkbox("🔴 Canlı İzleme Modu (Loop)", value=False, help="Otomatik olarak sürekli tarama yapar.")
-btn_start = st.sidebar.button("🔍 Tek Seferlik Analiz Başlat")
+btn_start = st.sidebar.button("🔍 Analizi Başlat")
 
 st.sidebar.markdown("---")
-st.sidebar.info("Bu araç eğitim amaçlıdır. Veriler yerel olarak işlenir.")
+st.sidebar.caption("Not: Eğer çıktı alamazsan, ağ ismini kontrol et (Wi-Fi veya Ethernet).")
 
 # --- 3. ANA EKRAN TASARIMI ---
 st.title("🎮 OyuncuAvi: Siber Güvenlik Analiz Paneli")
@@ -69,7 +51,6 @@ if btn_start or auto_refresh:
         
         # A. TRAFİĞİ YAKALA
         st.write("📡 Paketler dinleniyor...")
-        # Seçilen arayüz ismini fonksiyona gönderiyoruz
         pcap_file = start_sniffer(interface_name, count=packet_count)
         
         if pcap_file:
@@ -80,7 +61,7 @@ if btn_start or auto_refresh:
             status.update(label="Analiz Tamamlandı!", state="complete", expanded=False)
             
             if df is not None and not df.empty:
-                # --- 5. METRİKLER (KPI) ---
+                # --- 5. METRİKLER ---
                 total_pkts = len(df)
                 anomalies = df[df['anomaly'] == -1].copy()
                 anomaly_count = len(anomalies)
@@ -96,12 +77,12 @@ if btn_start or auto_refresh:
                 col4.metric("Ağ Durumu", "Kritik" if ratio > 5 else "Stabil", delta_color="normal" if ratio < 5 else "inverse")
 
                 # --- 6. GRAFİK ALANI ---
-                st.subheader("📊 Trafik Anomalisi Görselleştirme")
+                st.subheader("📊 Trafik Görselleştirme")
                 
                 fig, ax = plt.subplots(figsize=(12, 4))
                 normal = df[df['anomaly'] == 1]
                 ax.scatter(normal['time'], normal['length'], c='#1f77b4', s=15, label='Normal Trafik', alpha=0.6)
-                anomalies = df[df['anomaly'] == -1].copy() # Copy uyarısını önlemek için
+                anomalies = df[df['anomaly'] == -1].copy() 
                 ax.scatter(anomalies['time'], anomalies['length'], c='#d62728', s=40, label='Şüpheli Aktivite', edgecolors='black')
                 
                 ax.set_title(f"{interface_name} Üzerindeki Paket Boyutu Dağılımı")
@@ -121,6 +102,7 @@ if btn_start or auto_refresh:
                         ip_owner_map = {ip: get_ip_owner(ip) for ip in unique_ips}
                         anomalies['Owner'] = anomalies['src_ip'].map(ip_owner_map)
                     
+                    # Protokol isimlerini düzelt
                     anomalies['protocol_name'] = anomalies['protocol'].map(PROTOCOL_MAP).fillna("Diğer")
                     
                     display_df = anomalies[['time', 'src_ip', 'dst_ip', 'Owner', 'protocol_name', 'length']].sort_values(by='length', ascending=False)
