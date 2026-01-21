@@ -1,138 +1,66 @@
 <div align="center">
-  <img src="https://img.shields.io/github/languages/count/EfeSidal/Oyuncavi?style=flat-square&color=blueviolet" alt="Language Count">
-  <img src="https://img.shields.io/github/languages/top/EfeSidal/Oyuncavi?style=flat-square&color=1e90ff" alt="Top Language">
-  <img src="https://img.shields.io/github/last-commit/EfeSidal/Oyuncavi?style=flat-square&color=ff69b4" alt="Last Commit">
-  <img src="https://img.shields.io/github/license/EfeSidal/Oyuncavi?style=flat-square&color=yellow" alt="License">
-  <img src="https://img.shields.io/badge/Status-Active-green?style=flat-square" alt="Status">
-  <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=flat-square" alt="Contributions">
+
+  <img src="assets/banner.png" alt="Oyuncuavi Logo" width="100%" />
+
+  # 🎮 Oyuncuavi (Gamer Hunt)
+  
+  **Advanced Network Traffic Analysis for Online Gaming**
+
+  <p>
+    <a href="https://github.com/EfeSidal/Oyuncavi">
+      <img src="https://img.shields.io/github/languages/top/EfeSidal/Oyuncavi?style=flat-square&color=1e90ff" alt="Top Language" />
+    </a>
+    <a href="https://github.com/EfeSidal/Oyuncavi">
+      <img src="https://img.shields.io/github/last-commit/EfeSidal/Oyuncavi?style=flat-square&color=ff69b4" alt="Last Commit" />
+    </a>
+    <a href="LICENSE">
+      <img src="https://img.shields.io/github/license/EfeSidal/Oyuncavi?style=flat-square&color=yellow" alt="License" />
+    </a>
+    <img src="https://img.shields.io/badge/Focus-Network_Forensics-red?style=flat-square" alt="Focus" />
+  </p>
+
+  <p>
+    <a href="#about">About</a> •
+    <a href="#features">Features</a> •
+    <a href="#installation">Installation</a> •
+    <a href="#usage">Usage</a> •
+    <a href="#threat-model">Threat Model</a>
+  </p>
 </div>
 
-# Gamer Hunt  
-*Oyuncu Avı*
+---
 
-In this project, we analyze the network connections of users in some games using wirehark and identify the IP addresses, servers and ports used.
+## 🧐 About <a name="about"></a>
 
-*Bu projede bazı oyunlardaki kullanıcıların ağ bağlantılarını wireshark kullanarak analiz edip, kullanılan IP adreslerini, sunucuları ve portları tespit edeceğim.*
+**Oyuncuavi** is a specialized network traffic analysis tool designed to demystify the communication patterns of online games. By parsing `.pcap` and `.pcapng` files, it identifies **game server connections**, analyzes **latency characteristics**, and maps **regional server infrastructure**.
+
+Unlike generic traffic analyzers, Oyuncuavi focuses on the specific behaviors of gaming protocols (UDP floods, heartbeat packets, shared CDN usage).
+
+> **Note:** This project focuses strictly on **analysis and observability**, not exploitation or cheating.
 
 ---
 
-## Features / *Özellikler*
+## 🚀 Features <a name="features"></a>
 
--**1. Real-Time Network Traffic Analysis**:
-The project utilizes Wireshark to monitor and analyze network traffic in real time while users are playing games. It identifies which IP addresses are being used, the destination servers, and which ports are active during the connection.
-
--**1. Gerçek Zamanlı Ağ Trafiği Analizi**:
-Proje, Wireshark ile kullanıcıların oynadığı oyunlar sırasında gerçekleşen ağ trafiğini gerçek zamanlı olarak izleyerek, istemci-sunucu arasındaki veri alışverişini analiz eder. Bu sayede hangi IP adreslerinin kullanıldığı, hangi sunuculara bağlanıldığı ve veri iletimi için hangi portların açık olduğu tespit edilir.
-
--**2. Game-Specific Traffic Identification**:
-The project is capable of distinguishing traffic patterns specific to different games. By recognizing unique data packet structures, protocols, or server communication behaviors, it provides detailed insights into how each game connects and communicates over the network.  
-
--**2. Oyunlara Özgü Trafik Tanıma**:
-Proje, farklı oyunlara özgü ağ davranışlarını ayırt edebilir. Belirli oyunlara ait karakteristik veri paketleri, protokoller veya sunucu bağlantı desenleri tanımlanarak analiz detaylandırılır. Böylece oyunların bağlantı yapılarına dair özgün bilgiler elde edilir.
-
--**3. Security and Performance Assessment**:
-Based on the collected IP, port, and server data, the project can offer evaluations related to network security and performance. It can determine which server regions players are connecting to, measure latency, and assess the overall efficiency and reliability of the game's network infrastructure. 
-
--**3. Güvenlik ve Performans Değerlendirmesi**:
-Elde edilen IP, port ve sunucu verileriyle, oyunların ağ güvenliği ve performansı hakkında çıkarımlar yapılabilir. Örneğin, oyuncuların hangi ülkedeki sunuculara bağlandığı, bağlantı süresi ve gecikmeler (latency) gibi metrikler üzerinden performans analizi yapılabilir.
+| Feature | Description |
+| :--- | :--- |
+| **📁 Packet Inspection** | Deep analysis of `.pcap` files captured via Wireshark/Tcpdump. |
+| **🌍 Region Detection** | Identifies physical server locations (EU-West, NA-East, etc.) via IP metadata. |
+| **⚡ Latency Analysis** | Estimates connection stability and potential lag spikes based on packet timing. |
+| **🔍 Fingerprinting** | Uses heuristic patterns to distinguish game traffic from background OS noise. |
 
 ---
 
-## Team / *Ekip*
+## 🛠 Installation <a name="installation"></a>
 
--2420191004 -Efe Sidal: Project Owner/Proje Sahibi
-
----
-
-## Roadmap / *Yol Haritası*
-
-See our plans in [ROADMAP.md](ROADMAP.md).  
-*Yolculuğu görmek için [ROADMAP.md](ROADMAP.md) dosyasına göz atın.*
-
----
-
-## Research / *Araştırmalar*
-
-| Topic / *Başlık*        | Link                                    | Description / *Açıklama*                        |
-|-------------------------|-----------------------------------------|------------------------------------------------|
-| Aircrack Deep Dive      | [researchs/aircrack.md](researchs/aircrack.md) | In-depth analysis of Aircrack-ng suite. / *Aircrack-ng paketinin derinlemesine analizi.* |
-| Example Research Topic  | [researchs/your-research-file.md](researchs/your-research-file.md) | Brief overview of this research. / *Bu araştırmanın kısa bir özeti.* |
-| Add More Research       | *Link to your other research files*     | *Description of the research*                  |
-
----
-
-## Installation / *Kurulum*
-
-1. **Clone the Repository / *Depoyu Klonlayın***:  
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   cd YOUR_REPO
-   ```
-
-2. **Set Up Virtual Environment / *Sanal Ortam Kurulumu*** (Recommended):  
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install Dependencies / *Bağımlılıkları Yükleyin***:  
-   ```bash
-   pip install -r requirements.txt
-   ```
-
----
-
-## Usage / *Kullanım*
-
-Run the project:  
-*Projeyi çalıştırın:*
+Clone the repository and install the dependencies.
 
 ```bash
-python main.py --input your_file.pcap --output results.txt
-```
+# 1. Clone the repo
+git clone [https://github.com/EfeSidal/Oyuncavi.git](https://github.com/EfeSidal/Oyuncavi.git)
 
-**Steps**:  
-1. Prepare input data (*explain data needed*).  
-2. Run the script with arguments (*explain key arguments*).  
-3. Check output (*explain where to find results*).  
+# 2. Navigate to the directory
+cd Oyuncavi
 
-*Adımlar*:  
-1. Giriş verilerini hazırlayın (*ne tür verilere ihtiyaç duyulduğunu açıklayın*).  
-2. Betiği argümanlarla çalıştırın (*önemli argümanları açıklayın*).  
-3. Çıktıyı kontrol edin (*sonuçları nerede bulacağınızı açıklayın*).
-
----
-
-## Contributing / *Katkıda Bulunma*
-
-We welcome contributions! To help:  
-1. Fork the repository.  
-2. Clone your fork (`git clone git@github.com:YOUR_USERNAME/YOUR_REPO.git`).  
-3. Create a branch (`git checkout -b feature/your-feature`).  
-4. Commit changes with clear messages.  
-5. Push to your fork (`git push origin feature/your-feature`).  
-6. Open a Pull Request.  
-
-Follow our coding standards (see [CONTRIBUTING.md](CONTRIBUTING.md)).  
-
-*Topluluk katkilerini memnuniyetle karşılıyoruz! Katkıda bulunmak için yukarıdaki adımları izleyin ve kodlama standartlarımıza uyun.*
-
----
-
-## License / *Lisans*
-
-Licensed under the [MIT License](LICENSE.md).  
-*MIT Lisansı altında lisanslanmıştır.*
-
----
-
-## Contact / *İletişim* (Optional)
-
-Project Maintainer: [Efe Sidal/Istinye University] - [sidalefe2005@gmail.com]  
-Found a bug? Open an issue.  
-
-*Proje Sorumlusu: [Efe Sidal/Istinye University] - [sidalefe2005@gmail.com]. Hata bulursanız bir sorun bildirin.*
-
----
-
-*Replace placeholders (e.g., YOUR_USERNAME/YOUR_REPO) with your project details.*
+# 3. Install dependencies (Assuming Python)
+pip install -r requirements.txt
