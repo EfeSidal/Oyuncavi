@@ -1,10 +1,10 @@
 <div align="center">
 
-  <img src="assets/banner.png" alt="Oyuncuavi Logo" width="100%" />
+  
 
   # 🎮 Oyuncuavi (Gamer Hunt)
   
-  **Advanced Network Traffic Analysis for Online Gaming**
+  **Network Traffic Analysis for Online Gaming**
 
   <p>
     <a href="https://github.com/EfeSidal/Oyuncavi">
