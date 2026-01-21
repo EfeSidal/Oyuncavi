@@ -57,7 +57,7 @@ Clone the repository and install the dependencies.
 
 ```bash
 # 1. Clone the repo
-git clone [https://github.com/EfeSidal/Oyuncavi.git](https://github.com/EfeSidal/Oyuncavi.git)
+git clone [https://github.com/EfeSidal/Oyuncavi.git]
 
 # 2. Navigate to the directory
 cd Oyuncavi
