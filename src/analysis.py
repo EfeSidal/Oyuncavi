@@ -1,5 +1,5 @@
 import pandas as pd
-from scapy.all import rdpcap, IP, TCP, UDP
+from scapy.all import rdpcap, IP
 from sklearn.ensemble import IsolationForest
 from colorama import Fore
 
@@ -10,28 +10,33 @@ def detect_anomalies(pcap_file):
         packets = rdpcap(pcap_file)
     except FileNotFoundError:
         print(Fore.RED + "[!] Dosya bulunamadı." + Fore.RESET)
-        return
+        return None
 
     # Veri setini oluştur (Feature Extraction)
     data = []
     for pkt in packets:
         if IP in pkt:
-            # Deepsearch raporuna göre şifreli trafikte metadatalara (boyut, zaman) bakıyoruz
+            # ARTIK IP ADRESLERINI DE ALIYORUZ
+            src_ip = pkt[IP].src
+            dst_ip = pkt[IP].dst
             pkt_len = pkt.len
             pkt_proto = pkt[IP].proto
             pkt_time = float(pkt.time)
-            data.append([pkt_len, pkt_proto, pkt_time])
+            
+            # Listeye ekle
+            data.append([src_ip, dst_ip, pkt_len, pkt_proto, pkt_time])
 
     if not data:
         print(Fore.YELLOW + "[!] Analiz edilecek IP paketi bulunamadı." + Fore.RESET)
-        return
+        return None
 
-    df = pd.DataFrame(data, columns=["length", "protocol", "time"])
+    # DataFrame sütunlarını güncelle
+    df = pd.DataFrame(data, columns=["src_ip", "dst_ip", "length", "protocol", "time"])
 
-    # Model Eğitimi (Isolation Forest - Anomali Tespiti)
-    # Contamination=0.05 -> Verinin %5'inin anomali olduğunu varsayıyoruz.
+    # Model Eğitimi (Sadece sayısal verileri kullanıyoruz: length, time, protocol)
     model = IsolationForest(contamination=0.05, random_state=42)
-    df['anomaly'] = model.fit_predict(df[['length', 'time']])
+    # IP string olduğu için eğitime katmıyoruz, sadece sonuçta göstereceğiz
+    df['anomaly'] = model.fit_predict(df[['length', 'time', 'protocol']])
 
     # Sonuçları Filtrele (-1 anomali demektir)
     anomalies = df[df['anomaly'] == -1]
@@ -40,7 +45,8 @@ def detect_anomalies(pcap_file):
     print(Fore.RED + f"[!] Tespit Edilen Şüpheli Paket Sayısı: {len(anomalies)}" + Fore.RESET)
     
     if len(anomalies) > 0:
-        print("\n--- Şüpheli Paket Örnekleri ---")
-        print(anomalies.head())
-        return df # Görselleştirme için veriyi döndür
+        print("\n" + Fore.RED + "--- ŞÜPHELİ PAKET KAYNAKLARI (SALDIRGAN ADAYLARI) ---" + Fore.RESET)
+        # Sadece ilgili sütunları yazdır
+        print(anomalies[['src_ip', 'dst_ip', 'length', 'protocol']].head(10))
+        
     return df
