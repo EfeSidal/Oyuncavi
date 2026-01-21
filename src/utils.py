@@ -1,34 +1,47 @@
 from ipwhois import IPWhois
 import ipaddress
 
-# Sorgulanan IP'leri hafızada tutalım ki tekrar tekrar sorup vakit kaybetmeyelim (Cache)
+# Cache (Hafıza) - Aynı IP'yi tekrar tekrar sormamak için
 ip_cache = {}
 
-def get_ip_owner(ip):
+def get_ip_details(ip):
     """
-    Verilen IP adresinin sahibini (Organizasyon ismini) döndürür.
+    IP adresinin Sahibini, Ülkesini ve Koordinatlarını döndürür.
+    Return: {'org': '...', 'country': '...', 'lat': 0.0, 'lon': 0.0}
     """
-    # 1. IP zaten hafızada mı?
+    # 1. Cache kontrolü
     if ip in ip_cache:
         return ip_cache[ip]
 
-    # 2. Özel (Private) IP mi? (192.168.x.x gibi yerel ağ IP'lerinin sahibi olmaz)
+    default_data = {'org': 'Bilinmiyor', 'country': '??', 'lat': None, 'lon': None}
+
+    # 2. Özel IP kontrolü (Yerel Ağ)
     try:
         if ipaddress.ip_address(ip).is_private:
-            return "Yerel Ağ (Private)"
+            result = {'org': 'Yerel Ağ (Private)', 'country': 'LAN', 'lat': None, 'lon': None}
+            ip_cache[ip] = result
+            return result
     except ValueError:
-        return "Gecersiz IP"
+        return default_data
 
-    # 3. İnternetten sorgula
+    # 3. İnternetten Sorgula
     try:
         obj = IPWhois(ip)
-        # Hızlı sonuç için sadece temel bilgileri çekiyoruz
         res = obj.lookup_rdap(depth=1)
-        # Organizasyon adını bulmaya çalış
-        org = res.get('asn_description') or res.get('network', {}).get('name') or "Bilinmiyor"
         
-        # Sonucu kaydet ve döndür
-        ip_cache[ip] = org
-        return org
+        # Verileri çek
+        org = res.get('asn_description') or res.get('network', {}).get('name') or "Bilinmiyor"
+        country = res.get('asn_country_code') or "??"
+        
+        # Koordinat bulmaya çalış (Bazen tam gelmez ama deneyelim)
+        # Not: Ücretsiz IPWhois her zaman tam koordinat vermez, 
+        # profesyonel projelerde GeoIP2 veritabanı kullanılır. 
+        # Şimdilik basit tutmak için 'None' dönüyoruz, harita özelliğini ilerde geliştirebiliriz.
+        # Ancak Streamlit map için rastgele veya yaklaşık veri simule edebiliriz.
+        
+        result = {'org': org, 'country': country, 'lat': None, 'lon': None}
+        ip_cache[ip] = result
+        return result
+        
     except Exception as e:
-        return "Sorgu Hatasi"
+        return default_data

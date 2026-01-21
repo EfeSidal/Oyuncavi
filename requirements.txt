@@ -1,6 +1,9 @@
 scapy
 pandas
 numpy
-scikit-learn
 matplotlib
+scikit-learn
+streamlit
+ipwhois
 colorama
+plotly
