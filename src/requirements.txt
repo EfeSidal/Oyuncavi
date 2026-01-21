@@ -1,6 +1,0 @@
-scapy
-pandas
-numpy
-scikit-learn
-matplotlib
-colorama
