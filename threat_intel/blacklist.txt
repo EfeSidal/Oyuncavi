@@ -1,0 +1,28 @@
+# Oyuncuavi - Blacklist
+# Purpose: Analytical filtering only (non-blocking)
+# Format:
+# - One entry per line
+# - CIDR, single IP, or domain
+# - Lines starting with # are comments
+
+# --- Private / Local Networks ---
+127.0.0.0/8
+10.0.0.0/8
+172.16.0.0/12
+192.168.0.0/16
+
+# --- Public DNS Resolvers ---
+8.8.8.8        # Google DNS
+1.1.1.1        # Cloudflare DNS
+9.9.9.9        # Quad9
+
+# --- CDN / Cloud Providers (Non-game traffic) ---
+cloudflare.com
+akamai.net
+fastly.net
+amazonaws.com
+
+# --- Telemetry / Analytics ---
+telemetry
+analytics
+crash

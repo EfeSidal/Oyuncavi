@@ -1,0 +1,23 @@
+# Python gereksiz dosyalari
+__pycache__/
+*.pyc
+
+# Sanal Ortam
+venv/
+env/
+
+# Veri Dosyalari (Bunlari GitHub'a yukleme, sadece bilgisayarinda kalsin)
+*.pcap
+*.csv
+*.log
+data/captures/*
+data/reports/*
+logs/*
+
+# Yapay Zeka Modelleri (Cok buyuk olabilirler)
+*.pkl
+models/*
+
+# Kisisel Ayarlar
+.env
+.vscode/

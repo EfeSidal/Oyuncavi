@@ -1,23 +1,35 @@
-import os
 from scapy.all import sniff, wrpcap
-from colorama import Fore, Style
+import os
+import time
 
-def start_sniffer(interface, count=1000, output_folder="data"):
+def start_sniffer(interface, count=100):
     """
-    Belirtilen arayüzden paketleri dinler ve .pcap dosyasına kaydeder.
+    Belirtilen arayüzden paket yakalar ve 'data/captures' klasörüne kaydeder.
     """
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+    # 1. Klasör Yolunu Belirle (data/captures)
+    base_dir = "data"
+    capture_dir = os.path.join(base_dir, "captures")
     
-    filename = f"{output_folder}/capture.pcap"
-    print(Fore.CYAN + f"[*] {interface} üzerinde {count} paket dinleniyor..." + Style.RESET_ALL)
+    # 2. Klasör Yoksa Oluştur (Hata almamak için)
+    if not os.path.exists(capture_dir):
+        os.makedirs(capture_dir)
+    
+    # 3. Dosya İsmi Oluştur (Zaman damgalı: capture_20250121_1530.pcap)
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    filename = f"capture_{timestamp}.pcap"
+    filepath = os.path.join(capture_dir, filename) # Tam yol: data/captures/capture_...
+    
+    print(f"[*] {interface} uzerinden dinleme baslatildi... ({count} paket)")
     
     try:
-        # Scapy ile dinleme (ROADMAP.md referans alınmıştır)
+        # Paketleri Yakala
         packets = sniff(iface=interface, count=count)
-        wrpcap(filename, packets)
-        print(Fore.GREEN + f"[+] Yakalama tamamlandı! Dosya: {filename}" + Style.RESET_ALL)
-        return filename
+        
+        # Dosyayı Kaydet
+        wrpcap(filepath, packets)
+        print(f"[+] Paketler kaydedildi: {filepath}")
+        return filepath
+        
     except Exception as e:
-        print(Fore.RED + f"[!] Hata oluştu: {e}" + Style.RESET_ALL)
+        print(f"[!] Hata olustu: {e}")
         return None
