@@ -1,175 +1,53 @@
-## Çevrimiçi Oyunlarda Oyuncu Avı için Ağ Trafiği Analizi Prototipi Geliştirme
+# 🗺️ OyuncuAvi (GamerHunt) - Proje Yol Haritası
 
-## Giriş
-Bu yol haritası, çevrim içi oyunlarda kötü niyetli oyuncu davranışlarını tespit etmek ve azaltmak için ağ trafiği analizi yapan yenilikçi bir prototipin Python ile nasıl geliştirileceğini ve test edileceğini detaylı bir şekilde açıklar. Prototip, 2025’te etkili olan en son 10 tekniği (örn. YZ/ML tabanlı anomali tespiti, tersine mühendislik, ETA) kullanır. **Önemli Uyarı: Bu bilgiler yalnızca eğitim ve araştırma amaçlıdır. Yetkisiz kullanımı yasa dışı ve etik dışıdır. Herhangi bir ağda veya sistemde test yapmadan önce açık izin almanız zorunludur.**
+Bu yol haritası, **"2025 ve Sonrası İçin Gelişmiş Ağ Trafiği Analizi"** araştırma raporumuzdaki bulgulara dayanarak hazırlanmıştır. Hedefimiz, basit bir paket dinleyicisinden, Yapay Zeka destekli proaktif bir siber savunma sistemine evrilmektir.
 
-Bu rehber, kontrollü bir ortamda etik ve yasal sınırlar içinde prototip geliştirmeyi ve test etmeyi amaçlar.
+---
 
-## Ön Koşullar
-- **Python 3.x**: Geliştirme için temel dil.
-- **Kütüphaneler**:
-  - Scapy: Ağ paketi analizi için (`pip install scapy`).
-  - Pandas ve NumPy: Veri işleme için (`pip install pandas numpy`).
-  - Scikit-learn: YZ/ML tabanlı anomali tespiti için (`pip install scikit-learn`).
-  - Flask: Sahte sunucu veya arayüz için (`pip install flask`).
-  - Matplotlib: Trafik görselleştirme için (`pip install matplotlib`).
-- **Bilgi Gereksinimleri**:
-  - Python programlama temelleri.
-  - Ağ protokolleri (TCP/IP, UDP, HTTP/HTTPS, WebSocket) hakkında bilgi.
-  - YZ/ML temel kavramları (ör. anomali tespiti, kümeleme).
-  - Linux komut satırı kullanımı.
-- **Araçlar**: VirtualBox veya benzeri bir sanallaştırma yazılımı, Wireshark, Stratoshark.
+## ✅ Faz 1: MVP ve Temel Görünürlük (Mevcut Durum)
 
-## Test Ortamını Kurma
-Güvenli bir test ortamı oluşturmak için aşağıdaki adımları izleyin:
-1. **VirtualBox Kurulumu**: VirtualBox’ı indirin ve kurun.
-2. **Sanal Makineler (VM) Oluşturma**:
-   - **Saldırgan VM**: Kali Linux veya başka bir Linux dağıtımı.
-   - **Oyun İstemci VM**: Windows veya Linux (oyun istemcisi çalıştıran).
-   - **Oyun Sunucusu VM**: Basit bir oyun sunucusu simülasyonu.
-3. **Ağ Yapılandırması**: VM’leri yalnızca dahili veya host-only bir ağda çalışacak şekilde ayarlayın. Üretim ağlarından izole edin.
+*Projenin şu anki yetenekleri. Temel izleme ve anomali tespiti.*
 
-## Temel Bileşenlerin Geliştirilmesi
+* [x] **Canlı Paket Yakalama:** `Scapy` tabanlı yerel ağ dinleme altyapısı.
+* [x] **Görsel Dashboard:** Streamlit ile gerçek zamanlı trafik grafikleri.
+* [x] **Temel Anomali Tespiti:** `IsolationForest` algoritması ile istatistiksel sapmaların (anormal paket boyutları) tespiti.
+* [x] **IP Zenginleştirme:** Paketlerin ülke ve servis (Valve, Riot vb.) bazlı etiketlenmesi.
+* [x] **Demo Modu:** Sentetik veri üretimi ile test ortamı.
 
-### Ağ Trafiği Toplama Betiği
-Ağ trafiğini yakalamak için Scapy kullanılarak veri toplanır.
+---
 
-```python
-from scapy.all import *
+## 🚧 Faz 2: Şifreli Trafik Analizi (ETA) ve Profilleme (Q2 2026)
 
-def capture_traffic(interface="eth0", output_file="traffic.pcap"):
-    print(f"Starting packet capture on {interface}...")
-    packets = sniff(iface=interface, count=1000)  # 1000 paket yakala
-    wrpcap(output_file, packets)
-    print(f"Traffic saved to {output_file}")
+*Odak: Paket içeriğini okuyamadığımız modern oyunlarda (HTTPS/TLS) tehdit tespiti.*
 
-# Kullanım
-capture_traffic("eth0", "game_traffic.pcap")
-```
+* [ ] **Şifreli Trafik Analizi (ETA):** Paket içeriği şifreli olsa bile; paket boyutu, zamanlama ve akış (flow) metadatalarını analiz ederek oyun trafiğini tanımlayan modülün geliştirilmesi.
+* [ ] **Oyuncu Profilleme:** Her oyuncu/cihaz için "Normal Davranış" taban çizgisi (baseline) oluşturan ve bu profilden sapmaları (örn. hesap çalınması, bot kullanımı) tespit eden sistem.
+* [ ] **Gelişmiş Protokol Tersine Mühendisliği:** Popüler oyunların (Valorant, CS2) ağ imzalarının veritabanına eklenmesi.
 
-### YZ/ML Tabanlı Anomali Tespiti
-Scikit-learn ile anormal ağ trafiğini tespit eden bir model geliştirin.
+---
 
-```python
-import pandas as pd
-from sklearn.ensemble import IsolationForest
-from scapy.all import rdpcap
+## 🔮 Faz 3: Yapay Zeka Destekli NDR ve Tehdit Avcılığı (Q3 2026)
 
-def analyze_traffic(pcap_file):
-    packets = rdpcap(pcap_file)
-    data = []
-    for pkt in packets:
-        if IP in pkt:
-            data.append([pkt[IP].len, pkt[IP].ttl, pkt.time])
-    df = pd.DataFrame(data, columns=["length", "ttl", "time"])
-    
-    # Isolation Forest ile anomali tespiti
-    model = IsolationForest(contamination=0.1)
-    df['anomaly'] = model.fit_predict(df)
-    anomalies = df[df['anomaly'] == -1]
-    print("Detected anomalies:\n", anomalies)
+*Odak: Reaktif savunmadan, proaktif "Tehdit Avcılığına" geçiş.*
 
-# Kullanım
-analyze_traffic("game_traffic.pcap")
-```
+* [ ] **Gelişmiş AI Modelleri:** Basit `IsolationForest` yerine, zaman serisi analizi yapan **LSTM** veya **Autoencoder** derin öğrenme modellerinin entegrasyonu.
+* [ ] **Otomatik NDR (Network Detection & Response):** Tespit edilen tehditlere karşı otomatik aksiyon (örn. bağlantı kesme önerisi, firewall kuralı üretme) mekanizması.
+* [ ] **Tehdit Avcılığı (Threat Hunting) Arayüzü:** Geçmişe dönük trafik verileri üzerinde "Girişimci Saldırgan" (Enterprise Attacker) izlerini aramak için sorgu paneli.
 
-### Sahte Oyun Sunucusu
-Oyun istemcilerini test etmek için sahte bir sunucu oluşturun.
+---
 
-```python
-from flask import Flask, request
+## 🚀 Faz 4: Gelecek Vizyonu (2027 ve Ötesi)
 
-app = Flask(__name__)
+*Odak: Yeni nesil ağ teknolojileri ve donanım güvenliği.*
 
-@app.route('/game_endpoint', methods=['POST'])
-def game_endpoint():
-    data = request.get_json()
-    print(f"Received game data: {data}")
-    return {"status": "success", "message": "Data received"}
+* [ ] **Sıfır Güven (Zero Trust) Entegrasyonu:** "Asla güvenme, her zaman doğrula" prensibiyle, ağ içindeki her akışın sürekli kimlik doğrulamasını yapan modül.
+* [ ] **Donanım Hile Tespiti:** DMA kartları veya donanım tabanlı hilelerin yarattığı mikro gecikme (latency) anomalilerini tespit eden hassas zamanlama analizi.
+* [ ] **5G ve Edge Desteği:** 5G ağlarının düşük gecikme avantajını kullanarak analizi uç cihazlara (Edge) taşıma.
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
-```
+---
 
-### Trafik Görselleştirme
-Matplotlib ile ağ trafiğini görselleştirin.
+### 📂 Dokümantasyon ve Kaynaklar
 
-```python
-import matplotlib.pyplot as plt
-from scapy.all import rdpcap
+Bu yol haritası aşağıdaki araştırma raporuna dayanmaktadır:
 
-def visualize_traffic(pcap_file):
-    packets = rdpcap(pcap_file)
-    times = [pkt.time for pkt in packets]
-    lengths = [len(pkt) for pkt in packets]
-    
-    plt.scatter(times, lengths, s=10)
-    plt.xlabel("Time (s)")
-    plt.ylabel("Packet Size (bytes)")
-    plt.title("Network Traffic Analysis")
-    plt.show()
-
-# Kullanım
-visualize_traffic("game_traffic.pcap")
-```
-
-## Gelişmiş Geliştirmeler
-
-### Şifreli Trafik Analizi (ETA)
-Şifreli trafik meta verilerini analiz eden bir modül geliştirin.
-
-```python
-from scapy.all import *
-
-def analyze_encrypted_traffic(pcap_file):
-    packets = rdpcap(pcap_file)
-    for pkt in packets:
-        if pkt.haslayer(TLS):
-            print(f"TLS Packet: Version={pkt[TLS].version}, Length={len(pkt)}")
-            # Meta veri analizi (ör. sıklık, boyut)
-```
-
-### Botnet Tespiti
-Botnet davranışlarını tespit eden bir YZ modeli entegre edin.
-
-```python
-from sklearn.cluster import KMeans
-import pandas as pd
-from scapy.all import rdpcap
-
-def detect_botnet(pcap_file):
-    packets = rdpcap(pcap_file)
-    data = [[pkt[IP].src, pkt.time, len(pkt)] for pkt in packets if IP in pkt]
-    df = pd.DataFrame(data, columns=["src_ip", "time", "length"])
-    
-    # K-Means ile kümeleme
-    kmeans = KMeans(n_clusters=3)
-    df['cluster'] = kmeans.fit_predict(df[["time", "length"]])
-    print("Botnet clusters:\n", df.groupby('cluster').mean())
-
-# Kullanım
-detect_botnet("game_traffic.pcap")
-```
-
-## Geliştirmelerin Test Edilmesi
-1. **Ağ Trafiği Toplama**:
-   - Betiği çalıştırın.
-   - Wireshark ile `traffic.pcap` dosyasını kontrol edin; oyun trafiği kaydedilmiş olmalı.
-2. **YZ/ML Anomali Tespiti**:
-   - Betiği çalıştırın.
-   - Anormal paketler (ör. büyük boyutlu veya sık gönderilen) tespit edilmeli.
-3. **Sahte Oyun Sunucusu**:
-   - Oyun istemcisinden `http://<saldırgan_ip>:8080/game_endpoint` adresine istek gönderin; sunucu veriyi loglamalı.
-4. **Trafik Görselleştirme**:
-   - Betiği çalıştırın.
-   - Matplotlib grafiği, paket boyutlarını ve zamanlamasını göstermeli.
-
-## Karşı Önlemler ve En İyi Uygulamalar
-- **Şifreleme Kullanımı**: Oyun trafiğinde güçlü TLS/SSL protokolleri kullanın.
-- **Sıfır Güven Politikaları**: İstemci-sunucu doğrulamasını güçlendirin.
-- **Anomali Tespit Sistemleri**: Sürekli izleme için YZ tabanlı sistemler entegre edin.
-- **İzole Test Ortamı**: Üretim ağlarında test yapmayın.
-- **Yasal/Eetik Uyumluluk**: Test için açık izin alın; gizlilik düzenlemelerine uyun.
-
-## Sonuç
-Bu yol haritası, çevrim içi oyunlarda kötü niyetli oyuncu davranışlarını tespit etmek için Python tabanlı bir prototip geliştirmeyi ve test etmeyi adım adım açıklamıştır. Etik ve yasal sorumluluklara bağlı kalarak, bu bilgileri oyun güvenliğini güçlendirmek için kullanmaya devam edin.
+* `researchs/deepsearch.01.result.md`: *Çevrim İçi Oyunlarda Oyuncu Tespiti için Gelişmiş Ağ Trafiği Analizi*
