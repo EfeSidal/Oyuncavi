@@ -1,122 +1,120 @@
-# 🛡️ OyuncuAvi (GamerHunt) - Kurulum ve Kullanım Rehberi
 
-Bu proje, yerel ağ trafiğini (Wi-Fi/Ethernet) dinleyerek yapay zeka destekli analiz yapan ve siber tehditleri tespit eden görsel bir siber güvenlik aracıdır.
+# 📖 OyuncuAvi (GamerHunt) - Detaylı Kullanım Kılavuzu
 
-## 📂 Dosya Yapısı
-
-Proje klasörünüzün şu şekilde göründüğünden emin olun:
-
-* `dashboard.py` (Arayüz ve ana program)
-* `generate_sample.py` (Demo verisi üreten araç)
-* `requirements.txt` (Gerekli kütüphaneler)
-* `src/` (Kaynak kod klasörü)
-* `samples/` (Örnek verilerin kaydedildiği klasör)
+Bu doküman, **OyuncuAvi** siber güvenlik aracının kurulumu, yapılandırılması ve kullanımı hakkında detaylı teknik bilgiler içerir. Eğer kurulumda sorun yaşıyorsanız doğru yerdesiniz.
 
 ---
 
-## 🚀 Adım 1: Gerekli Programların Kurulumu
+## 🏗️ 1. Ön Hazırlık ve Gereksinimler
 
-Bu aracı çalıştırmak için bilgisayarınızda şu iki yazılımın kurulu olması gerekir:
+Projeyi çalıştırmadan önce bilgisayarınızda aşağıdaki yazılımların doğru şekilde kurulduğundan emin olun. Çoğu hata bu aşamanın atlanmasından kaynaklanır.
 
-### 1. Python (Yüklü değilse)
+### A. Python Kurulumu
+* **İndir:** [Python.org](https://www.python.org/downloads/) adresinden en güncel sürümü indirin.
+* **⚠️ Kritik Ayar:** Kurulum ekranının en altında yer alan **"Add Python to PATH"** kutucuğunu **MUTLAKA** işaretleyin.
+    * *Neden?* İşaretlemezseniz terminalde `python` veya `pip` komutları çalışmaz.
 
-* [Python.org](https://www.python.org/downloads/) adresinden Python'un son sürümünü indirin.
-* **⚠️ ÇOK ÖNEMLİ:** Kurulum ekranının en altında çıkan **"Add Python to PATH"** kutucuğunu mutlaka işaretleyin.
+### B. Npcap Kurulumu (Windows İçin Şart)
+Windows işletim sistemi, varsayılan olarak ağ kartını "dinleme moduna" (monitor mode) almanıza izin vermez. Scapy kütüphanesinin çalışması için Npcap sürücüsü şarttır.
 
-### 2. Npcap (Canlı Ağ Trafiğini Dinlemek İçin)
-
-Windows, varsayılan olarak ağ trafiğini dinlemeye (sniffing) izin vermez. Npcap sürücüsü bu işi yapar.
-
-* [Npcap İndir](https://npcap.com/#download) adresine gidin ve yükleyiciyi indirin.
-* Kurulum sırasında **"Install Npcap in WinPcap API-compatible Mode"** seçeneğini **KESİNLİKLE İŞARETLEYİN**.
-    * *(Eğer bu kutucuğu işaretlemezseniz program ağ kartınızı göremez.)*
+* **İndir:** [Npcap İndirme Sayfası](https://npcap.com/#download)
+* **⚠️ Kritik Ayar:** Kurulum sırasında karşınıza gelen seçeneklerden **"Install Npcap in WinPcap API-compatible Mode"** kutucuğunu **KESİNLİKLE** işaretleyin.
+    * *Neden?* Scapy kütüphanesi eski WinPcap API'sini kullanır. Bu seçenek olmadan ağ kartlarınızı göremezsiniz.
 
 ---
 
-## ⚙️ Adım 2: Kütüphanelerin Yüklenmesi
+## ⚙️ 2. Proje Kurulumu
 
-1. Proje klasörünün içine girin.
-2. Klasördeki boş bir yere **Sağ Tık > Terminalde Aç** (veya adres çubuğuna `cmd` yazıp Enter) yapın.
-3. Aşağıdaki komutu yapıştırıp Enter'a basın:
+Terminali (Komut İstemi / CMD) açın ve aşağıdaki adımları sırasıyla uygulayın.
+
+### Adım 1: Kütüphaneleri Yükleyin
+Proje klasörünün içine girin ve gerekli Python kütüphanelerini yükleyin:
 
 ```bash
 pip install -r requirements.txt
 
 ```
 
-*(İnternet hızınıza göre 1-2 dakika sürebilir. Hata alırsanız Python sürümünüzü kontrol edin.)*
+*(Eğer `pip` komutu bulunamadı hatası alırsanız, bilgisayarı yeniden başlatıp tekrar deneyin veya Python kurulumunu onarın.)*
 
----
+### Adım 2: Demo Verisi Oluşturun (Tavsiye Edilir)
 
-## 🧪 Adım 3: Demo Verisi Oluşturma (İsteğe Bağlı)
-
-Eğer programı canlı ağda test etmeden önce **Demo Modu** ile denemek istiyorsanız, önce örnek veri dosyasını oluşturmalısınız.
-
-Terminalde şu komutu çalıştırın:
+Programı ilk kez çalıştırıyorsanız, canlı ağ trafiği ile uğraşmadan önce sistemin çalıştığını test etmek için sahte veri üretin:
 
 ```bash
 python generate_sample.py
 
 ```
 
-* Bu işlem `samples` klasörü içine `sample_game_traffic.pcap` adında sahte bir oyun trafiği dosyası oluşturacaktır.
-* Programdaki "Demo Modu" bu dosyayı kullanır.
+* Bu komut, `data/captures` veya `samples` klasörüne `sample_game_traffic.pcap` adında bir dosya oluşturur.
+* İçinde sahte CS:GO, Minecraft ve saldırı (DDoS) paketleri bulunur.
 
 ---
 
-## ▶️ Adım 4: Programı Çalıştırma
+## ▶️ 3. Programı Çalıştırma
 
-**⚠️ ÖNEMLİ UYARI:** Canlı ağ dinleme (Sniffing) işlemi için terminali **Yönetici Olarak (Run as Administrator)** açmanız gerekebilir.
-
-1. Terminali açın ve şu komutu yazın:
+Programı başlatmak için şu komutu kullanın:
 
 ```bash
 python -m streamlit run dashboard.py
 
 ```
 
-2. Komutu yazdıktan sonra internet tarayıcınız otomatik olarak açılacak ve **OyuncuAvi Kontrol Paneli** karşınıza gelecektir.
+**Not:** Eğer canlı ağ dinleme (Live Sniffing) yapacaksanız, terminali **"Yönetici Olarak Çalıştır" (Run as Administrator)** seçeneği ile açmanız gerekebilir. Windows, normal kullanıcıların ağ trafiğini dinlemesine izin vermeyebilir.
 
 ---
 
-## 🎮 Adım 5: Kullanım
+## 🎮 4. Arayüz Kullanımı
 
-Panel açıldığında yapmanız gerekenler:
+Tarayıcınızda açılan panelde (genellikle `http://localhost:8501`) şu kontroller bulunur:
 
-### Seçenek A: Canlı Analiz
+### A. Sol Menü (Ayarlar)
 
-1. Sol menüden **"Demo Modu"** kutucuğunun işaretini kaldırın.
-2. **Ağ Arayüzü** kutusuna kullandığınız bağlantıyı yazın (`Wi-Fi` veya `Ethernet`).
-* *Emin değilseniz "Ağ Kartlarını Listele" butonuna basıp ismine bakabilirsiniz.*
+1. **Dil / Language:** Arayüzü Türkçe veya İngilizce olarak değiştirebilirsiniz.
+2. **Örnek Veri ile Test Et (Demo Modu):**
+* **İşaretli ise:** Ağınızı dinlemez. `generate_sample.py` ile oluşturduğunuz dosyayı okur. Güvenli test için idealdir.
+* **İşaretli değil ise:** Canlı ağ trafiğini dinlemeye başlar.
 
 
-3. **"Analizi Başlat"** butonuna basın.
+3. **Ağ Arayüzü (Interface):**
+* Canlı modda hangi kartı dinleyeceğinizi seçersiniz. Genellikle `Wi-Fi` veya `Ethernet` yazmanız yeterlidir.
+* Emin değilseniz **"❓ Ağ Kartlarını Listele"** butonuna basarak sistemdeki kart isimlerini görebilirsiniz.
 
-### Seçenek B: Demo Modu (Test)
 
-1. Sol menüden **"Örnek Veri ile Test Et (Demo Modu)"** kutucuğunu işaretleyin.
-2. Program otomatik olarak `sample_game_traffic.pcap` dosyasını analiz eder ve sonuçları gösterir.
+4. **Paket Sayısı:** Analiz için kaç adet paket yakalanacağını belirler. Sayı arttıkça analiz süresi uzar ama doğruluk artar.
+
+### B. Ana Ekran (Sonuçlar)
+
+Analiz tamamlandığında 3 ana sekme görürsünüz:
+
+1. **📊 Analiz Grafiği:**
+* **Mavi Noktalar:** Normal, güvenli trafik (örn. Spotify, Google, Web siteleri).
+* **Kırmızı Noktalar:** Anormal trafik. Yapay zeka (Isolation Forest) tarafından şüpheli bulunan paketler (örn. Çok büyük boyutlu paketler, beklenmedik portlar).
+
+
+2. **🌍 Dünya Haritası:**
+* Şüpheli paketlerin hangi ülkelerden geldiğini gösterir. (Örn: Çin veya Rusya'dan gelen beklenmedik trafik).
+
+
+3. **🚨 Detaylı Tehdit Listesi:**
+* Saldırganın IP adresi, hedef portu, paketin boyutu ve tespit edilebildiyse Kurum/Oyun bilgisi (örn. Valve, Riot Games).
+
+
 
 ---
 
-## 📊 Sonuçların Okunması
+## ❓ 5. Sık Karşılaşılan Hatalar ve Çözümleri
 
-* **Grafik:** Mavi Noktalar **normal trafiği**, Kırmızı Noktalar **şüpheli/saldırı trafiğini** gösterir.
-* **Dünya Haritası:** Saldırıların hangi ülkelerden geldiğini (örn. Çin, Rusya vb.) harita üzerinde boyar.
-* **Tablo:** Şüpheli paketlerin detaylarını (IP Adresi, Kurum, Oyun Servisi) listeler.
+| Hata Mesajı | Olası Sebep | Çözüm |
+| --- | --- | --- |
+| `Scapy_Exception: Interface is invalid` | Ağ kartı ismi yanlış veya Npcap yüklü değil. | Npcap'i "WinPcap Mode" ile tekrar kurun. Arayüz ismini (Wi-Fi vb.) doğru yazdığınızdan emin olun. |
+| `Permission denied` / `Erişim engellendi` | Yetki eksikliği. | Terminali (CMD) sağ tıklayıp **"Yönetici Olarak Çalıştır"** deyin. |
+| `No module named 'streamlit'` | Kütüphaneler yüklenmemiş. | `pip install -r requirements.txt` komutunu tekrar çalıştırın. |
+| `Hata: Örnek dosya bulunamadı!` | Demo verisi üretilmemiş. | `python generate_sample.py` komutunu çalıştırın. |
+| **Grafik Boş Geliyor** | Arayüzden veri geçmiyor olabilir. | Doğru ağ kartını seçtiğinizden emin olun veya bir YouTube videosu açarak ağda trafik oluşturun. |
 
 ---
 
-## ❓ Sık Karşılaşılan Hatalar
+## 📞 Destek
 
-**Hata 1:** `Scapy_Exception: Interface is invalid` veya `No libpcap provider available`
-
-* **Çözüm:** Npcap yüklü değildir veya yüklerken "WinPcap Compatible Mode" seçilmemiştir. Npcap'i silip tekrar rehberdeki gibi yükleyin.
-
-**Hata 2:** `Permission denied` veya Paket yakalamıyor.
-
-* **Çözüm:** Kullandığınız terminali (CMD veya PowerShell) **Yönetici Olarak Çalıştır** diyerek açın.
-
-**Hata 3:** `Hata: Örnek dosya bulunamadı!`
-
-* **Çözüm:** Adım 3'teki `python generate_sample.py` komutunu çalıştırmayı unuttunuz.
+Eğer yukarıdaki adımlara rağmen sorun yaşıyorsanız, hatanın ekran görüntüsünü alarak geliştirici ekibe (veya GitHub Issues kısmına) iletin.
