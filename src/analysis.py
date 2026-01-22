@@ -1,15 +1,9 @@
 import pandas as pd
-from scapy.all import rdpcap, IP
+from scapy.all import rdpcap, IP, TCP, UDP
 from sklearn.ensemble import IsolationForest
 import os
 
 def detect_anomalies(pcap_file):
-    """
-    Sadece paketleri analiz eder ve anomali tespiti yapar.
-    WHOIS veya IP sorgusu yapmaz (Hata riskini azaltmak için).
-    """
-    
-    # Dosya yoksa işlem yapma
     if not os.path.exists(pcap_file):
         return None
 
@@ -18,7 +12,6 @@ def detect_anomalies(pcap_file):
     except Exception:
         return None
 
-    # Verileri ayıkla
     data = []
     for pkt in packets:
         if IP in pkt:
@@ -28,20 +21,25 @@ def detect_anomalies(pcap_file):
             pkt_proto = pkt[IP].proto
             pkt_time = float(pkt.time)
             
-            data.append([src_ip, dst_ip, pkt_len, pkt_proto, pkt_time])
+            # YENİ: Port Numarasını Yakala (Oyun tespiti için)
+            dst_port = 0
+            if TCP in pkt:
+                dst_port = pkt[TCP].dport
+            elif UDP in pkt:
+                dst_port = pkt[UDP].dport
+            
+            data.append([src_ip, dst_ip, pkt_len, pkt_proto, pkt_time, dst_port])
 
     if not data:
         return None
 
-    # DataFrame oluştur
-    df = pd.DataFrame(data, columns=["src_ip", "dst_ip", "length", "protocol", "time"])
+    # DataFrame oluştur (dst_port eklendi)
+    df = pd.DataFrame(data, columns=["src_ip", "dst_ip", "length", "protocol", "time", "dst_port"])
 
-    # Yapay Zeka Modeli (Isolation Forest)
-    # Sadece sayısal verileri kullanıyoruz
+    # Yapay Zeka (Sayısal verilerle eğit)
     model = IsolationForest(contamination=0.05, random_state=42)
-    
     try:
-        df['anomaly'] = model.fit_predict(df[['length', 'time', 'protocol']])
+        df['anomaly'] = model.fit_predict(df[['length', 'time', 'dst_port']])
     except ValueError:
         df['anomaly'] = 1
 
