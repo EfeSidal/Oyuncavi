@@ -53,14 +53,5 @@ Unlike generic traffic analyzers, Oyuncuavi focuses on the specific behaviors of
 
 ## 🛠 Installation <a name="installation"></a>
 
-Clone the repository and install the dependencies.
-
-```bash
-# 1. Clone the repo
-git clone [https://github.com/EfeSidal/Oyuncavi.git]
-
-# 2. Navigate to the directory
-cd Oyuncavi
-
-# 3. Install dependencies (Assuming Python)
-pip install -r requirements.txt
+> ⚠️ If you try to run the project without following the installation steps,
+> you will run into issues. Please read the **[User Guide](https://github.com/EfeSidal/Oyuncavi/blob/main/User_Guide.md)** first.
