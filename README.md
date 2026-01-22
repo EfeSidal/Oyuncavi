@@ -1,66 +1,56 @@
 <div align="center">
 
-  
-
   # 🎮 Oyuncuavi (Gamer Hunt)
   
-  **Network Traffic Analysis for Online Gaming**
+  **Çevrim İçi Oyunlar için Ağ Trafiği Analizi**
 
   <p>
     <a href="https://github.com/EfeSidal/Oyuncavi">
-      <img src="https://img.shields.io/github/languages/top/EfeSidal/Oyuncavi?style=flat-square&color=1e90ff" alt="Top Language" />
+      <img src="https://img.shields.io/github/languages/top/EfeSidal/Oyuncavi?style=flat-square&color=1e90ff" alt="Ana Dil" />
     </a>
     <a href="https://github.com/EfeSidal/Oyuncavi">
-      <img src="https://img.shields.io/github/last-commit/EfeSidal/Oyuncavi?style=flat-square&color=ff69b4" alt="Last Commit" />
+      <img src="https://img.shields.io/github/last-commit/EfeSidal/Oyuncavi?style=flat-square&color=ff69b4" alt="Son Commit" />
     </a>
     <a href="LICENSE">
-      <img src="https://img.shields.io/github/license/EfeSidal/Oyuncavi?style=flat-square&color=yellow" alt="License" />
+      <img src="https://img.shields.io/github/license/EfeSidal/Oyuncavi?style=flat-square&color=yellow" alt="Lisans" />
     </a>
-    <img src="https://img.shields.io/badge/Focus-Network_Forensics-red?style=flat-square" alt="Focus" />
+    <img src="https://img.shields.io/badge/Odak-Ağ_Adli_Analizi-red?style=flat-square" alt="Odak" />
   </p>
 
   <p>
-    <a href="#about">About</a> •
-    <a href="#features">Features</a> •
-    <a href="#installation">Installation</a> •
-    <a href="#usage">Usage</a> •
-    <a href="#threat-model">Threat Model</a>
+    <a href="#about">Hakkında</a> •
+    <a href="#features">Özellikler</a> •
+    <a href="#installation">Kurulum</a> •
+    <a href="#usage">Kullanım</a> •
+    <a href="#threat-model">Tehdit Modeli</a>
   </p>
 </div>
 
 ---
 
-## 🧐 About <a name="about"></a>
+## 🧐 Hakkında <a name="about"></a>
 
-**Oyuncuavi** is a specialized network traffic analysis tool designed to demystify the communication patterns of online games. By parsing `.pcap` and `.pcapng` files, it identifies **game server connections**, analyzes **latency characteristics**, and maps **regional server infrastructure**.
+**Oyuncuavi**, çevrim içi oyunların iletişim desenlerini anlaşılır hâle getirmek için tasarlanmış, özel bir ağ trafiği analiz aracıdır.  
+`.pcap` ve `.pcapng` dosyalarını ayrıştırarak **oyun sunucusu bağlantılarını** tespit eder, **gecikme (latency) karakteristiklerini** analiz eder ve **bölgesel sunucu altyapısını** haritalandırır.
 
-Unlike generic traffic analyzers, Oyuncuavi focuses on the specific behaviors of gaming protocols (UDP floods, heartbeat packets, shared CDN usage).
+Genel amaçlı trafik analiz araçlarının aksine Oyuncuavi, oyun protokollerine özgü davranışlara odaklanır (UDP yoğunluğu, heartbeat paketleri, paylaşılan CDN kullanımı).
 
-> **Note:** This project focuses strictly on **analysis and observability**, not exploitation or cheating.
+> **Not:** Bu proje **kesinlikle analiz ve gözlemlenebilirlik** amaçlıdır; istismar, hile veya avantaj sağlama hedeflemez.
 
 ---
 
-## 🚀 Features <a name="features"></a>
+## 🚀 Özellikler <a name="features"></a>
 
-| Feature | Description |
+| Özellik | Açıklama |
 | :--- | :--- |
-| **📁 Packet Inspection** | Deep analysis of `.pcap` files captured via Wireshark/Tcpdump. |
-| **🌍 Region Detection** | Identifies physical server locations (EU-West, NA-East, etc.) via IP metadata. |
-| **⚡ Latency Analysis** | Estimates connection stability and potential lag spikes based on packet timing. |
-| **🔍 Fingerprinting** | Uses heuristic patterns to distinguish game traffic from background OS noise. |
+| **📁 Paket İncelemesi** | Wireshark / Tcpdump ile alınmış `.pcap` dosyalarının derin analizi. |
+| **🌍 Bölge Tespiti** | IP metadatası üzerinden fiziksel sunucu konumlarının (EU-West, NA-East vb.) belirlenmesi. |
+| **⚡ Gecikme Analizi** | Paket zamanlamasına bakarak bağlantı kararlılığı ve olası lag sıçramalarının tahmini. |
+| **🔍 Parmak İzi Analizi** | Oyun trafiğini arka plan işletim sistemi trafiğinden ayırmak için sezgisel desenler kullanır. |
 
 ---
 
-## 🛠 Installation <a name="installation"></a>
+## 🛠 Kurulum <a name="installation"></a>
 
-Clone the repository and install the dependencies.
-
-```bash
-# 1. Clone the repo
-git clone [https://github.com/EfeSidal/Oyuncavi.git](https://github.com/EfeSidal/Oyuncavi.git)
-
-# 2. Navigate to the directory
-cd Oyuncavi
-
-# 3. Install dependencies (Assuming Python)
-pip install -r requirements.txt
+> ⚠️ Kurulum adımlarını takip etmeden projeyi çalıştırmaya çalışırsanız sorun yaşarsınız.  
+> Lütfen önce **[User Guide](https://github.com/EfeSidal/Oyuncavi/blob/main/User_Guide.md)** dosyasını okuyun.
