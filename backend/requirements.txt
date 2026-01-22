@@ -1,0 +1,11 @@
+scapy
+pandas
+numpy
+matplotlib
+scikit-learn
+streamlit
+ipwhois
+colorama
+plotly
+fastapi
+uvicorn
