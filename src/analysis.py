@@ -21,7 +21,7 @@ def detect_anomalies(pcap_file):
             pkt_proto = pkt[IP].proto
             pkt_time = float(pkt.time)
             
-            # YENİ: Port Numarasını Yakala (Oyun tespiti için)
+           
             dst_port = 0
             if TCP in pkt:
                 dst_port = pkt[TCP].dport
@@ -33,10 +33,10 @@ def detect_anomalies(pcap_file):
     if not data:
         return None
 
-    # DataFrame oluştur (dst_port eklendi)
+    
     df = pd.DataFrame(data, columns=["src_ip", "dst_ip", "length", "protocol", "time", "dst_port"])
 
-    # Yapay Zeka (Sayısal verilerle eğit)
+   
     model = IsolationForest(contamination=0.05, random_state=42)
     try:
         df['anomaly'] = model.fit_predict(df[['length', 'time', 'dst_port']])
