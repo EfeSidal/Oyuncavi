@@ -2,8 +2,7 @@ from ipwhois import IPWhois
 import ipaddress
 import os
 
-# --- 1. OYUN İMZALARI (PORT LISTESI) ---
-# Buraya popüler oyunların portlarını ekledik.
+
 GAME_PORTS = {
     27015: "Valve (CS:GO/HL)",
     27016: "Valve (CS:GO/HL)",
@@ -15,14 +14,14 @@ GAME_PORTS = {
     3074: "Xbox Live / CoD",
     30000: "FiveM (GTA V)",
     5000: "LoL (League of Legends)",
-    # Buraya istediğin kadar oyun ekleyebilirsin
+    
 }
 
-# Cache
+
 ip_cache = {}
 blacklist_ips = set()
 
-# --- 2. KARA LİSTEYİ YÜKLE ---
+
 def load_blacklist():
     """threat_intel/blacklist.txt dosyasını hafızaya yükler."""
     global blacklist_ips
@@ -30,29 +29,29 @@ def load_blacklist():
         path = os.path.join("threat_intel", "blacklist.txt")
         if os.path.exists(path):
             with open(path, "r") as f:
-                # Satır satır oku, boşlukları temizle
+                
                 blacklist_ips = {line.strip() for line in f if line.strip() and not line.startswith("#")}
     except Exception as e:
         print(f"Blacklist hatası: {e}")
 
-# İlk çalışmada listeyi yükle
+
 load_blacklist()
 
-# --- 3. IP DETAYLARI VE OYUN TESPİTİ ---
+
 def get_ip_details(ip, port=0):
     """
     IP sahibini, ülkesini, oyun bilgisini ve kara liste durumunu döndürür.
     """
-    # Oyun Tespiti (Port bazlı basit imza)
+    
     service_name = GAME_PORTS.get(int(port), "Bilinmiyor")
     
-    # Kara Liste Kontrolü
+    
     is_blacklisted = ip in blacklist_ips
 
-    # Cache kontrolü
+    
     if ip in ip_cache:
         data = ip_cache[ip].copy()
-        data['service'] = service_name # Port değişebileceği için güncelleyelim
+        data['service'] = service_name 
         data['is_malicious'] = is_blacklisted
         return data
 
@@ -63,7 +62,7 @@ def get_ip_details(ip, port=0):
         'is_malicious': is_blacklisted
     }
 
-    # Özel IP kontrolü
+    
     try:
         if ipaddress.ip_address(ip).is_private:
             result = default_data.copy()
@@ -74,7 +73,7 @@ def get_ip_details(ip, port=0):
     except ValueError:
         return default_data
 
-    # İnternetten Sorgula
+    
     try:
         obj = IPWhois(ip)
         res = obj.lookup_rdap(depth=1)

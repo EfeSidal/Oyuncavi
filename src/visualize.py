@@ -6,11 +6,11 @@ def plot_traffic(df):
 
     plt.figure(figsize=(10, 6))
     
-    # Normal trafik (Mavi)
+    
     normal = df[df['anomaly'] == 1]
     plt.scatter(normal['time'], normal['length'], c='blue', s=10, label='Normal Trafik')
     
-    # Anomali trafiği (Kırmızı)
+    
     anomalies = df[df['anomaly'] == -1]
     plt.scatter(anomalies['time'], anomalies['length'], c='red', s=30, label='Anomali (Şüpheli)')
     
