@@ -1,18 +1,87 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { Shield, Play, Activity, AlertTriangle, Server } from 'lucide-react'
+import { Server, AlertTriangle, Activity, Globe } from 'lucide-react'
 
-// Backend Adresi (FastAPI varsayılan portu)
+// Components
+import Header from './components/Header'
+import KpiCard from './components/KpiCard'
+import ControlPanel from './components/ControlPanel'
+import TrafficChart from './components/TrafficChart'
+import ThreatTable from './components/ThreatTable'
+import ProtocolChart from './components/ProtocolChart'
+import ExportPanel from './components/ExportPanel'
+import TopTalkers from './components/TopTalkers'
+import StatsBar from './components/StatsBar'
+import PortChart from './components/PortChart'
+import GameServices from './components/GameServices'
+
+// Context
+import { useAlerts } from './context/AlertContext'
+import { useSettings } from './context/SettingsContext'
+
+// Backend URL
 const API_URL = "http://127.0.0.1:8000"
+
+// Demo data generator with game services
+function generateDemoData() {
+  const packets = []
+  const now = Date.now() / 1000
+
+  // Game service ports
+  const gamePorts = [27015, 27016, 3478, 7777, 443, 80, 53, 3389, 25565, 5223]
+
+  for (let i = 0; i < 200; i++) {
+    const isAnomaly = Math.random() < 0.08
+    const baseLength = isAnomaly ? 1200 + Math.random() * 800 : 64 + Math.random() * 500
+    const isGameTraffic = Math.random() > 0.4
+
+    packets.push({
+      src_ip: isAnomaly
+        ? `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`
+        : `192.168.1.${Math.floor(Math.random() * 50)}`,
+      dst_ip: isGameTraffic
+        ? `${['162.254', '104.160', '24.105', '18.188'][Math.floor(Math.random() * 4)]}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`
+        : `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
+      src_port: 1024 + Math.floor(Math.random() * 64000),
+      dst_port: gamePorts[Math.floor(Math.random() * gamePorts.length)],
+      protocol: Math.random() > 0.3 ? 6 : 17,
+      length: Math.floor(baseLength),
+      time: now + i * 0.1,
+      iat: Math.random() * 0.5,
+      jitter: Math.random() * 0.1,
+      anomaly: isAnomaly ? -1 : 1
+    })
+  }
+
+  return packets
+}
 
 function App() {
   const [interfaceName, setInterfaceName] = useState("Wi-Fi")
-  const [status, setStatus] = useState("idle") // idle, scanning, completed
+  const [status, setStatus] = useState("idle")
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [isConnected, setIsConnected] = useState(true)
 
-  // Polling: Her 2 saniyede bir sonuçları kontrol et
+  const { addAlert } = useAlerts()
+  const { settings } = useSettings()
+
+  // Check backend connection
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        await axios.get(`${API_URL}/`)
+        setIsConnected(true)
+      } catch {
+        setIsConnected(false)
+      }
+    }
+    checkConnection()
+    const interval = setInterval(checkConnection, 10000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Polling for results
   useEffect(() => {
     let interval
     if (status === "scanning") {
@@ -21,148 +90,186 @@ function App() {
           const res = await axios.get(`${API_URL}/results`)
           if (res.data.status === "completed" || (res.data.data && res.data.data.length > 0)) {
             setData(res.data.data)
-            if(res.data.status === "completed") {
-                setStatus("completed")
-                setLoading(false)
-                clearInterval(interval)
+            if (res.data.status === "completed") {
+              setStatus("completed")
+              setLoading(false)
+              clearInterval(interval)
+
+              // Alert on completion
+              const anomalyCount = res.data.data.filter(d => d.anomaly === -1).length
+              if (anomalyCount > 0) {
+                addAlert({
+                  type: 'threat',
+                  message: `Tarama tamamlandı: ${anomalyCount} tehdit tespit edildi!`,
+                  playSound: settings.soundEnabled
+                })
+              } else {
+                addAlert({
+                  type: 'success',
+                  message: 'Tarama tamamlandı: Tehdit bulunamadı.'
+                })
+              }
             }
           }
         } catch (error) {
-          console.error("Backend hatası:", error)
+          console.error("Backend error:", error)
         }
       }, 2000)
     }
     return () => clearInterval(interval)
-  }, [status])
+  }, [status, addAlert, settings.soundEnabled])
 
-  const startScan = async () => {
+  const startScan = async (packetCount = 200) => {
     setLoading(true)
     setStatus("scanning")
-    setData([]) 
+    setData([])
+    addAlert({
+      type: 'info',
+      message: `Tarama başlatıldı: ${interfaceName} üzerinde ${packetCount} paket`
+    })
     try {
-      // Backend'e "Başla" emri ver
-      await axios.post(`${API_URL}/start/${interfaceName}?packet_count=200`)
+      await axios.post(`${API_URL}/start/${interfaceName}?packet_count=${packetCount}`)
     } catch (error) {
-      alert("Hata: Backend (FastAPI) çalışmıyor olabilir! 'python main.py' yaptın mı?")
+      addAlert({
+        type: 'threat',
+        message: 'Backend bağlantı hatası! python main.py çalıştırın.',
+        playSound: true
+      })
       setLoading(false)
       setStatus("idle")
+      setIsConnected(false)
     }
   }
 
-  // Anomalileri filtrele
+  const startDemo = () => {
+    setLoading(true)
+    setStatus("scanning")
+    setData([])
+    addAlert({
+      type: 'info',
+      message: 'Demo modu başlatıldı...'
+    })
+
+    setTimeout(() => {
+      const demoData = generateDemoData()
+      setData(demoData)
+      setStatus("completed")
+      setLoading(false)
+
+      const anomalyCount = demoData.filter(d => d.anomaly === -1).length
+      addAlert({
+        type: anomalyCount > 0 ? 'threat' : 'success',
+        message: `Demo tamamlandı: ${anomalyCount} tehdit tespit edildi!`,
+        playSound: anomalyCount > 0 && settings.soundEnabled
+      })
+    }, 2000)
+  }
+
   const anomalies = data.filter(d => d.anomaly === -1)
+  const uniqueIps = new Set(data.map(d => d.src_ip.split('.').slice(0, 2).join('.')))
 
   return (
-    <div className="min-h-screen p-8 font-sans bg-slate-900 text-slate-100">
-      {/* BAŞLIK */}
-      <header className="flex items-center justify-between mb-10 border-b border-gray-700 pb-4">
-        <div className="flex items-center gap-3">
-          <Shield className="w-10 h-10 text-cyan-400" />
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
-            OyuncuAvi v2.0
-          </h1>
-        </div>
-        <div className="text-sm text-gray-400">
-          Durum: <span className={status === "scanning" ? "text-yellow-400 animate-pulse" : "text-green-400"}>{status.toUpperCase()}</span>
-        </div>
-      </header>
+    <div className="h-screen max-h-screen overflow-hidden p-4 relative flex flex-col" style={{ background: 'var(--gradient-dark)' }}>
+      {/* Cyber Grid Background */}
+      <div className="cyber-grid"></div>
 
-      {/* KONTROL PANELİ */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 col-span-1 shadow-lg">
-          <label className="block text-sm text-gray-400 mb-2">Ağ Arayüzü</label>
-          <div className="flex gap-2">
-            <input 
-              type="text" 
-              value={interfaceName}
-              onChange={(e) => setInterfaceName(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-600 rounded px-3 py-2 text-white focus:outline-none focus:border-cyan-500"
+      {/* Main Content */}
+      <div className="relative z-10 w-full h-full flex flex-col gap-3">
+        {/* Header */}
+        <Header status={status} isConnected={isConnected} />
+
+        {/* Stats Bar */}
+        {data.length > 0 && (
+          <div className="animate-fade-in">
+            <StatsBar data={data} status={status} />
+          </div>
+        )}
+
+        {/* Main Grid */}
+        <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
+
+          {/* Left Sidebar */}
+          <div className="col-span-2 flex flex-col gap-3 overflow-hidden">
+            <ControlPanel
+              interfaceName={interfaceName}
+              setInterfaceName={setInterfaceName}
+              onStart={startScan}
+              onDemo={startDemo}
+              loading={loading}
+              status={status}
             />
-            <button 
-              onClick={startScan}
-              disabled={loading}
-              className={`p-2 rounded font-bold transition-all flex items-center justify-center w-12 ${loading ? 'bg-gray-600 cursor-not-allowed' : 'bg-cyan-600 hover:bg-cyan-500'}`}
-            >
-              {loading ? <Activity className="animate-spin" /> : <Play />}
-            </button>
+
+            {data.length > 0 && (
+              <>
+                <ExportPanel data={data} anomalies={anomalies} />
+                <div className="flex-1 min-h-0">
+                  <ProtocolChart data={data} />
+                </div>
+              </>
+            )}
           </div>
-        </div>
 
-        {/* KPI KARTLARI */}
-        <KpiCard title="Toplam Paket" value={data.length} icon={<Server />} color="text-blue-400" />
-        <KpiCard title="Tehdit Sayısı" value={anomalies.length} icon={<AlertTriangle />} color="text-red-500" />
-        <KpiCard title="Risk Oranı" value={`%${data.length > 0 ? ((anomalies.length/data.length)*100).toFixed(1) : 0}`} icon={<Activity />} color="text-yellow-400" />
-      </div>
+          {/* Main Content Area */}
+          <div className="col-span-7 flex flex-col gap-3">
+            {/* KPI Cards Row */}
+            <div className="grid grid-cols-4 gap-3">
+              <KpiCard
+                title="Toplam Paket"
+                value={data.length}
+                icon={<Server className="w-5 h-5" />}
+                color="text-cyan-400"
+                delay={0}
+              />
+              <KpiCard
+                title="Tespit Edilen Tehdit"
+                value={anomalies.length}
+                icon={<AlertTriangle className="w-5 h-5" />}
+                color="text-red-400"
+                delay={100}
+              />
+              <KpiCard
+                title="Risk Oranı"
+                value={data.length > 0 ? `%${((anomalies.length / data.length) * 100).toFixed(1)}` : '%0'}
+                icon={<Activity className="w-5 h-5" />}
+                color="text-yellow-400"
+                delay={200}
+              />
+              <KpiCard
+                title="Benzersiz Kaynak"
+                value={uniqueIps.size}
+                icon={<Globe className="w-5 h-5" />}
+                color="text-purple-400"
+                delay={300}
+              />
+            </div>
 
-      {/* GRAFİK ALANI */}
-      {data.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          {/* SOL: GRAFİK */}
-          <div className="lg:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
-            <h3 className="text-xl font-bold mb-4 text-cyan-100 flex items-center gap-2">
-              <Activity className="w-5 h-5" /> Trafik Analizi (Boyut / Zaman)
-            </h3>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis dataKey="time" hide />
-                  <YAxis stroke="#94a3b8" />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #475569' }}
-                    itemStyle={{ color: '#fff' }}
-                  />
-                  <Line type="monotone" dataKey="length" stroke="#22d3ee" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
+            {/* Traffic Chart */}
+            <div className="flex-1 animate-fade-in min-h-0">
+              <TrafficChart data={data} anomalies={anomalies} />
             </div>
           </div>
 
-          {/* SAĞ: TEHDİT LİSTESİ */}
-          <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
-            <h3 className="text-xl font-bold mb-4 text-red-400 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" /> Tespit Edilen Tehditler
-            </h3>
-            <div className="overflow-y-auto h-[300px]">
-              <table className="w-full text-left text-sm">
-                <thead className="sticky top-0 bg-slate-800">
-                  <tr className="text-gray-400 border-b border-gray-700">
-                    <th className="pb-2">Kaynak IP</th>
-                    <th className="pb-2">Hedef</th>
-                    <th className="pb-2">Boyut</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {anomalies.length === 0 ? (
-                    <tr><td colSpan="3" className="text-center py-10 text-green-500">✅ Ağ Temiz</td></tr>
-                  ) : (
-                    anomalies.map((item, idx) => (
-                      <tr key={idx} className="border-b border-gray-700/50 hover:bg-slate-700/50">
-                        <td className="py-2 text-red-300 font-mono">{item.src_ip}</td>
-                        <td className="py-2 text-gray-300 font-mono">{item.dst_ip}</td>
-                        <td className="py-2 text-yellow-300">{item.length} B</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+          {/* Right Sidebar */}
+          <div className="col-span-3 flex flex-col gap-3 overflow-hidden">
+            {/* Threat Table */}
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <ThreatTable threats={anomalies} />
             </div>
+
+            {/* Bottom Row */}
+            {data.length > 0 && (
+              <div className="grid grid-cols-2 gap-3 animate-fade-in">
+                <TopTalkers data={data} />
+                <GameServices data={data} />
+              </div>
+            )}
           </div>
         </div>
-      )}
-    </div>
-  )
-}
 
-// KPI Kart Bileşeni
-function KpiCard({ title, value, icon, color }) {
-  return (
-    <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4 hover:border-cyan-500/50 transition-all">
-      <div className={`p-4 rounded-lg bg-slate-900 ${color}`}>{icon}</div>
-      <div>
-        <p className="text-sm text-gray-400">{title}</p>
-        <p className="text-3xl font-bold text-white">{value}</p>
+        {/* Footer */}
+        <div className="py-1 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          OyuncuAvi v2.0 — AI-Powered Network Threat Analysis
+        </div>
       </div>
     </div>
   )
