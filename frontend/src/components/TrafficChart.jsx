@@ -49,8 +49,8 @@ export default function TrafficChart({ data = [], anomalies = [] }) {
 
     if (data.length === 0) {
         return (
-            <div className="glass-card h-full p-4 flex flex-col">
-                <div className="flex items-center gap-2.5 mb-4">
+            <div className="glass-card h-full p-5 flex flex-col">
+                <div className="flex items-center gap-2.5 mb-4 pl-1">
                     <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                         <Activity className="w-4 h-4 text-cyan-400" />
                     </div>
@@ -73,9 +73,9 @@ export default function TrafficChart({ data = [], anomalies = [] }) {
     }
 
     return (
-        <div className="glass-card h-full p-4 flex flex-col">
+        <div className="glass-card h-full p-5 flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 px-1">
                 <div className="flex items-center gap-2.5">
                     <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                         <Activity className="w-4 h-4 text-cyan-400" />
@@ -168,7 +168,7 @@ export default function TrafficChart({ data = [], anomalies = [] }) {
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-xs text-cyan-400">μ</span>
+                            <span className="text-xs text-cyan-400">E</span>
                         </div>
                         <div>
                             <p className="text-lg font-bold font-mono text-cyan-400 tabular-nums">{avgSize} B</p>

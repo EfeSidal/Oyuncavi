@@ -43,7 +43,7 @@ export default function KpiCard({ title, value, icon, color = 'text-cyan-400', d
 
     return (
         <div
-            className={`glass-card p-4 group hover-lift transition-all duration-300 ${isVisible ? 'animate-slide-up' : 'opacity-0'
+            className={`glass-card p-6 group hover-lift transition-all duration-300 ${isVisible ? 'animate-slide-up' : 'opacity-0'
                 }`}
             style={{ animationDelay: `${delay}ms` }}
         >
@@ -54,9 +54,9 @@ export default function KpiCard({ title, value, icon, color = 'text-cyan-400', d
                             'bg-gradient-to-br from-purple-500/5 to-transparent'
                 }`}></div>
 
-            <div className="relative flex items-start justify-between gap-3">
+            <div className="relative flex items-start justify-between gap-4 px-1">
                 {/* Icon */}
-                <div className={`p-2.5 rounded-xl ${color.includes('cyan') ? 'bg-cyan-500/10 border border-cyan-500/20' :
+                <div className={`p-3 rounded-xl ${color.includes('cyan') ? 'bg-cyan-500/10 border border-cyan-500/20' :
                         color.includes('red') ? 'bg-red-500/10 border border-red-500/20' :
                             color.includes('yellow') ? 'bg-yellow-500/10 border border-yellow-500/20' :
                                 'bg-purple-500/10 border border-purple-500/20'
@@ -68,7 +68,7 @@ export default function KpiCard({ title, value, icon, color = 'text-cyan-400', d
 
                 {/* Trend Indicator */}
                 {trend !== null && (
-                    <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${trend > 0
+                    <div className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium ${trend > 0
                             ? 'bg-green-500/10 text-green-400 border border-green-500/20'
                             : 'bg-red-500/10 text-red-400 border border-red-500/20'
                         }`}>
@@ -78,13 +78,13 @@ export default function KpiCard({ title, value, icon, color = 'text-cyan-400', d
             </div>
 
             {/* Value */}
-            <div className="relative mt-3">
-                <p className={`text-3xl font-bold ${color} font-mono tracking-tight`}>
+            <div className="relative mt-4 px-1">
+                <p className={`text-4xl font-bold ${color} font-mono tracking-tight`}>
                     {formattedValue}
                 </p>
 
                 {/* Underline Gradient */}
-                <div className={`h-0.5 w-12 rounded-full mt-2 transition-all duration-500 group-hover:w-full ${color.includes('cyan') ? 'bg-gradient-to-r from-cyan-500 to-transparent' :
+                <div className={`h-1 w-16 rounded-full mt-3 transition-all duration-500 group-hover:w-full ${color.includes('cyan') ? 'bg-gradient-to-r from-cyan-500 to-transparent' :
                         color.includes('red') ? 'bg-gradient-to-r from-red-500 to-transparent' :
                             color.includes('yellow') ? 'bg-gradient-to-r from-yellow-500 to-transparent' :
                                 'bg-gradient-to-r from-purple-500 to-transparent'
@@ -92,7 +92,7 @@ export default function KpiCard({ title, value, icon, color = 'text-cyan-400', d
             </div>
 
             {/* Title */}
-            <p className="text-xs font-medium text-slate-500 mt-2 uppercase tracking-wider">
+            <p className="text-sm font-medium text-slate-500 mt-3 uppercase tracking-wider px-1">
                 {title}
             </p>
         </div>

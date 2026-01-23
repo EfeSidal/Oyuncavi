@@ -49,33 +49,33 @@ export default function ExportPanel({ data = [], anomalies = [] }) {
     }
 
     return (
-        <div className="glass-card p-4">
+        <div className="glass-card p-6">
             {/* Header */}
-            <div className="flex items-center gap-2.5 mb-3">
-                <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 flex-shrink-0">
-                    <Download className="w-4 h-4 text-purple-400" />
+            <div className="flex items-center gap-3 mb-5 px-1">
+                <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 flex-shrink-0">
+                    <Download className="w-5 h-5 text-purple-400" />
                 </div>
-                <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                <span className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
                     Dışa Aktar
                 </span>
             </div>
 
             {/* Export Buttons */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3 px-1">
                 <button
                     onClick={exportJSON}
                     disabled={data.length === 0}
-                    className="btn btn-ghost text-xs py-2.5 flex items-center justify-center gap-1.5"
+                    className="btn btn-ghost text-sm py-3 flex items-center justify-center gap-2"
                 >
-                    <FileJson className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                    <FileJson className="w-5 h-5 text-cyan-400 flex-shrink-0" />
                     <span>JSON</span>
                 </button>
                 <button
                     onClick={exportCSV}
                     disabled={data.length === 0}
-                    className="btn btn-ghost text-xs py-2.5 flex items-center justify-center gap-1.5"
+                    className="btn btn-ghost text-sm py-3 flex items-center justify-center gap-2"
                 >
-                    <FileSpreadsheet className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <FileSpreadsheet className="w-5 h-5 text-green-400 flex-shrink-0" />
                     <span>CSV</span>
                 </button>
             </div>

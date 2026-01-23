@@ -11,10 +11,10 @@ export default function StatsBar({ data = [], status }) {
         : '0.0'
 
     return (
-        <div className="glass-card px-4 py-3">
+        <div className="glass-card px-5 py-3">
             <div className="flex items-center justify-between gap-6">
                 {/* Title */}
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2.5 pl-1">
                     <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                         <BarChart3 className="w-4 h-4 text-cyan-400" />
                     </div>
@@ -24,7 +24,7 @@ export default function StatsBar({ data = [], status }) {
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-6 text-xs">
+                <div className="flex items-center gap-6 text-xs pr-1">
                     <div className="flex items-center gap-2">
                         <span className="text-slate-500">Ort Boyut:</span>
                         <span className="font-mono text-cyan-400 font-semibold tabular-nums">{avgSize} B</span>

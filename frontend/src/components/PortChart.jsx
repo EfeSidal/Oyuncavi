@@ -31,23 +31,23 @@ export default function PortChart({ data = [] }) {
         }))
 
     return (
-        <div className="glass-card p-4 h-full flex flex-col">
+        <div className="glass-card p-6 h-full flex flex-col">
             {/* Header */}
-            <div className="flex items-center gap-2.5 mb-3">
-                <div className="p-2 rounded-xl bg-green-500/10 border border-green-500/20 flex-shrink-0">
-                    <BarChart3 className="w-4 h-4 text-green-400" />
+            <div className="flex items-center gap-3 mb-5 px-1">
+                <div className="p-2.5 rounded-xl bg-green-500/10 border border-green-500/20 flex-shrink-0">
+                    <BarChart3 className="w-5 h-5 text-green-400" />
                 </div>
-                <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                <span className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
                     Port Dağılımı
                 </span>
             </div>
 
             {chartData.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">
+                <div className="flex-1 flex items-center justify-center text-slate-500 text-sm px-1">
                     Veri yok
                 </div>
             ) : (
-                <div className="flex-1 min-h-[100px]">
+                <div className="flex-1 min-h-[100px] px-1">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 10 }}>
                             <XAxis type="number" hide />

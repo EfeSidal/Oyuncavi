@@ -10,7 +10,7 @@ const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
         const data = payload[0]
         return (
-            <div className="glass-card p-2.5 border border-slate-700/50 text-xs">
+            <div className="glass-card p-3 border border-slate-700/50 text-xs">
                 <p className="font-semibold" style={{ color: data.payload.fill }}>
                     {data.name}
                 </p>
@@ -45,12 +45,12 @@ export default function ProtocolChart({ data = [] }) {
 
     if (data.length === 0) {
         return (
-            <div className="glass-card p-4 h-full">
-                <div className="flex items-center gap-2.5 mb-3">
-                    <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
-                        <Layers className="w-4 h-4 text-cyan-400" />
+            <div className="glass-card p-6 h-full">
+                <div className="flex items-center gap-3 mb-5 px-1">
+                    <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
+                        <Layers className="w-5 h-5 text-cyan-400" />
                     </div>
-                    <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                    <span className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
                         Protokol Dağılımı
                     </span>
                 </div>
@@ -62,13 +62,13 @@ export default function ProtocolChart({ data = [] }) {
     }
 
     return (
-        <div className="glass-card p-4 h-full flex flex-col">
+        <div className="glass-card p-6 h-full flex flex-col">
             {/* Header */}
-            <div className="flex items-center gap-2.5 mb-3">
-                <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
-                    <Layers className="w-4 h-4 text-cyan-400" />
+            <div className="flex items-center gap-3 mb-5 px-1">
+                <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
+                    <Layers className="w-5 h-5 text-cyan-400" />
                 </div>
-                <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                <span className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
                     Protokol Dağılımı
                 </span>
             </div>
@@ -101,16 +101,16 @@ export default function ProtocolChart({ data = [] }) {
             </div>
 
             {/* Legend */}
-            <div className="flex items-center justify-center gap-6 pt-2 border-t border-slate-700/30 mt-2">
+            <div className="flex items-center justify-center gap-8 pt-4 border-t border-slate-700/30 mt-3 px-1">
                 <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-cyan-400 flex-shrink-0" style={{ boxShadow: '0 0 8px #06b6d4' }}></span>
-                    <span className="text-xs text-slate-400">TCP</span>
-                    <span className="text-xs font-mono font-bold text-cyan-400 tabular-nums">({tcpCount})</span>
+                    <span className="w-3.5 h-3.5 rounded-full bg-cyan-400 flex-shrink-0" style={{ boxShadow: '0 0 8px #06b6d4' }}></span>
+                    <span className="text-sm text-slate-400">TCP</span>
+                    <span className="text-sm font-mono font-bold text-cyan-400 tabular-nums">({tcpCount})</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-purple-400 flex-shrink-0" style={{ boxShadow: '0 0 8px #8b5cf6' }}></span>
-                    <span className="text-xs text-slate-400">UDP</span>
-                    <span className="text-xs font-mono font-bold text-purple-400 tabular-nums">({udpCount})</span>
+                    <span className="w-3.5 h-3.5 rounded-full bg-purple-400 flex-shrink-0" style={{ boxShadow: '0 0 8px #8b5cf6' }}></span>
+                    <span className="text-sm text-slate-400">UDP</span>
+                    <span className="text-sm font-mono font-bold text-purple-400 tabular-nums">({udpCount})</span>
                 </div>
             </div>
         </div>

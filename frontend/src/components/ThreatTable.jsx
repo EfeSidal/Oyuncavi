@@ -20,8 +20,8 @@ export default function ThreatTable({ threats = [] }) {
     if (threats.length === 0) {
         return (
             <div className="glass-card h-full flex flex-col">
-                <div className="p-4 border-b border-slate-700/30">
-                    <div className="flex items-center gap-2.5">
+                <div className="p-5 border-b border-slate-700/30">
+                    <div className="flex items-center gap-2.5 pl-1">
                         <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                             <Shield className="w-4 h-4 text-cyan-400" />
                         </div>
@@ -46,8 +46,8 @@ export default function ThreatTable({ threats = [] }) {
     return (
         <div className="glass-card h-full flex flex-col overflow-hidden">
             {/* Header */}
-            <div className="p-4 border-b border-slate-700/30 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
+            <div className="p-5 border-b border-slate-700/30 flex items-center justify-between">
+                <div className="flex items-center gap-2.5 pl-1">
                     <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/20 flex-shrink-0">
                         <AlertTriangle className="w-4 h-4 text-red-400" />
                     </div>

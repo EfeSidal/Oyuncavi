@@ -150,6 +150,13 @@ body::before {
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  padding: 20px;
+  /* Fix for rounded corner background bleed */
+  isolation: isolate;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
 }
 
 /* Shimmer Effect on Cards */
@@ -171,6 +178,16 @@ body::before {
 
 .glass-card:hover::before {
   opacity: 1;
+}
+
+/* Panel Content Padding */
+.panel-content {
+  padding: 8px 12px;
+}
+
+.panel-header {
+  padding: 4px 8px;
+  margin-bottom: 12px;
 }
 
 /* Card Header Style */

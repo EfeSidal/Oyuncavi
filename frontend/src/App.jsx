@@ -169,12 +169,12 @@ function App() {
   const uniqueIps = new Set(data.map(d => d.src_ip.split('.').slice(0, 2).join('.')))
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden p-4 relative flex flex-col" style={{ background: 'var(--gradient-dark)' }}>
+    <div className="h-screen max-h-screen overflow-hidden p-5 relative flex flex-col" style={{ background: 'var(--gradient-dark)' }}>
       {/* Cyber Grid Background */}
       <div className="cyber-grid"></div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full h-full flex flex-col gap-3">
+      <div className="relative z-10 w-full h-full flex flex-col gap-5">
         {/* Header */}
         <Header status={status} isConnected={isConnected} />
 
@@ -186,10 +186,10 @@ function App() {
         )}
 
         {/* Main Grid */}
-        <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
+        <div className="flex-1 grid grid-cols-12 gap-5 min-h-0">
 
           {/* Left Sidebar */}
-          <div className="col-span-2 flex flex-col gap-3 overflow-hidden">
+          <div className="col-span-2 flex flex-col gap-5 overflow-hidden">
             <ControlPanel
               interfaceName={interfaceName}
               setInterfaceName={setInterfaceName}
@@ -210,9 +210,9 @@ function App() {
           </div>
 
           {/* Main Content Area */}
-          <div className="col-span-7 flex flex-col gap-3">
+          <div className="col-span-7 flex flex-col gap-5">
             {/* KPI Cards Row */}
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-4 gap-4">
               <KpiCard
                 title="Toplam Paket"
                 value={data.length}
@@ -250,7 +250,7 @@ function App() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="col-span-3 flex flex-col gap-3 overflow-hidden">
+          <div className="col-span-3 flex flex-col gap-5 overflow-hidden">
             {/* Threat Table */}
             <div className="flex-1 min-h-0 overflow-hidden">
               <ThreatTable threats={anomalies} />
@@ -258,7 +258,7 @@ function App() {
 
             {/* Bottom Row */}
             {data.length > 0 && (
-              <div className="grid grid-cols-2 gap-3 animate-fade-in">
+              <div className="grid grid-cols-2 gap-4 animate-fade-in">
                 <TopTalkers data={data} />
                 <GameServices data={data} />
               </div>
@@ -267,7 +267,7 @@ function App() {
         </div>
 
         {/* Footer */}
-        <div className="py-1 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="py-2 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
           OyuncuAvi v2.0 — AI-Powered Network Threat Analysis
         </div>
       </div>
