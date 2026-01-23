@@ -5,9 +5,10 @@
 <div align="center">
 
   <img src="https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Streamlit-Dashboard-red?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React">
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
   <img src="https://img.shields.io/badge/AI-Anomaly%20Detection-green?style=for-the-badge" alt="AI">
-  <img src="https://img.shields.io/badge/Status-Prototype-orange?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/Status-v2.0-success?style=for-the-badge" alt="Status">
 
   <p>
     <b>Oyun trafiğini dinle, anomalileri tespit et, tehditleri haritalandır.</b>
@@ -23,20 +24,24 @@
 Geleneksel Wireshark analizlerinin aksine, OyuncuAvi **son kullanıcı odaklıdır**. Karmaşık paket listeleri yerine; görsel grafikler, coğrafi saldırı haritaları ve yapay zeka destekli anomali skorları sunar.
 
 ### 🎯 Temel Hedefler
-* **Şifreli Trafik Analizi (ETA):** Paket içeriğini okumadan (şifrelemeyi kırmadan), boyut ve zamanlama metadataları üzerinden oyun trafiğini analiz etmek.
+* **Şifreli Trafik Analizi (ETA):** Paket içeriğini okumadan, boyut ve zamanlama metadataları üzerinden oyun trafiğini analiz etmek.
 * **Anomali Tespiti:** `IsolationForest` algoritması ile normal oyun akışına uymayan (DDoS, Botnet, Hile yazılımı trafiği) paketleri belirlemek.
-* **Coğrafi İstihbarat:** Paketlerin hangi ülkeden ve hangi oyun sunucusundan (Valve, Riot, Blizzard vb.) geldiğini görselleştirmek.
+* **Oyun Servisi Tespiti:** Valve, Riot, Blizzard, Epic Games gibi oyun sunucularından gelen trafiği otomatik tanımlamak.
 
 ---
 
-## 🚀 Özellikler
+## 🚀 Özellikler (v2.0)
 
 | Özellik | Açıklama |
 | :--- | :--- |
-| **🧪 Demo Modu** | Herhangi bir ağ trafiği olmadan, simüle edilmiş veri ile aracı test etme imkanı. |
-| **📊 Canlı Dashboard** | Streamlit tabanlı, interaktif grafikler ve dünya haritası. |
-| **🧠 AI Analizi** | Makine öğrenmesi ile şüpheli paket boyutlarını ve sıklıklarını tespit eder. |
-| **🌍 IP Zenginleştirme** | IP adreslerini otomatik olarak Ülke, ISP ve Oyun Servisi bilgisiyle eşleştirir. |
+| **🎨 Modern React Dashboard** | Vite + React tabanlı, glassmorphism tasarımlı interaktif arayüz |
+| **🌓 Dark/Light Tema** | Tek tıkla tema değiştirme, tercih localStorage'da saklanır |
+| **🧠 AI Analizi** | Makine öğrenmesi ile şüpheli paket boyutlarını ve sıklıklarını tespit eder |
+| **🎮 Oyun Servisi Tespiti** | Valve, Riot, Blizzard, Epic, Discord, Minecraft trafiğini tanır |
+| **🔔 Bildirim Sistemi** | Tehdit tespit edildiğinde anlık bildirim ve ses uyarısı |
+| **⚙️ Ayarlar Paneli** | Anomali hassasiyeti, bildirimler ve tercihler |
+| **📥 Dışa Aktarma** | JSON/CSV formatında analiz sonuçlarını indir |
+| **📊 Detaylı Grafikler** | Trafik analizi, protokol dağılımı, port istatistikleri |
 
 ---
 
@@ -46,28 +51,36 @@ Detaylı kurulum için lütfen **[📖 Kullanım Rehberi (User Guide)](User_Guid
 
 ### Hızlı Başlangıç (Windows)
 
-1. **Gereksinimleri Yükleyin:**
-   ```bash
-   pip install -r requirements.txt
-
-```
-
-*(Not: Windows'ta paket yakalamak için [Npcap](https://npcap.com/) sürücüsünün kurulu olması gerekir.)*
-
-2. **Demo Verisi Oluşturun (Opsiyonel):**
+#### 1. Backend Kurulumu
 ```bash
-python generate_sample.py
+# Backend bağımlılıklarını yükle
+pip install -r requirements.txt
 
+# Npcap sürücüsünü yükle (Windows için şart)
+# https://npcap.com/ adresinden indirin
 ```
 
-
-3. **Uygulamayı Başlatın:**
+#### 2. Frontend Kurulumu
 ```bash
-python -m streamlit run dashboard.py
-
+cd frontend
+npm install
 ```
 
+#### 3. Uygulamayı Başlat
+```bash
+# Terminal 1 - Backend (Yönetici olarak)
+cd backend
+python main.py
 
+# Terminal 2 - Frontend
+cd frontend
+npm run dev
+```
+
+#### 4. Tarayıcıda Aç
+```
+http://localhost:5173
+```
 
 ---
 
@@ -75,16 +88,32 @@ python -m streamlit run dashboard.py
 
 ```
 OyuncuAvi/
-├── dashboard.py        # Ana Streamlit Uygulaması (Arayüz)
-├── generate_sample.py  # Demo verisi üreten simülasyon aracı
-├── requirements.txt    # Kütüphane bağımlılıkları
+├── backend/
+│   ├── main.py           # FastAPI sunucusu
+│   └── data/
+│       ├── captures/     # Yakalanan paket dosyaları (.pcap)
+│       └── processed/    # İşlenmiş analiz dosyaları
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx       # Ana React bileşeni
+│   │   ├── components/   # UI bileşenleri
+│   │   │   ├── Header.jsx
+│   │   │   ├── KpiCard.jsx
+│   │   │   ├── TrafficChart.jsx
+│   │   │   ├── ThreatTable.jsx
+│   │   │   ├── ControlPanel.jsx
+│   │   │   ├── AlertPanel.jsx
+│   │   │   ├── SettingsPanel.jsx
+│   │   │   └── ...
+│   │   ├── context/      # React Context providers
+│   │   └── utils/        # Yardımcı fonksiyonlar
+│   └── package.json
 ├── src/
-│   ├── analysis.py     # AI ve Anomali tespiti (Isolation Forest)
-│   ├── capture.py      # Scapy ile ağ dinleme modülü
-│   └── utils.py        # IP Whois ve Blacklist işlemleri
-└── threat_intel/
-    └── blacklist.txt   # Bilinen zararlı IP listesi
-
+│   ├── analysis.py       # AI ve Anomali tespiti (Isolation Forest)
+│   ├── capture.py        # Scapy ile ağ dinleme modülü
+│   └── utils.py          # IP ve Blacklist işlemleri
+├── README.md
+└── User_Guide.md
 ```
 
 ---
@@ -108,3 +137,7 @@ Bu proje **eğitim ve araştırma amaçlı** geliştirilmiştir.
 5. Pull Request açın
 
 ---
+
+## 📜 Lisans
+
+MIT License - Detaylar için `LICENSE` dosyasına bakın.
