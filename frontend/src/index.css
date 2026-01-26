@@ -664,6 +664,7 @@ select.input {
 /* Range Slider */
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   height: 6px;
   background: rgba(148, 163, 184, 0.2);
   border-radius: 100px;
