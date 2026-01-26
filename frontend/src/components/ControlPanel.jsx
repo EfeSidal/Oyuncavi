@@ -1,5 +1,8 @@
-import { Network, Play, Pause, Zap, Settings } from 'lucide-react'
-import { useState } from 'react'
+import { Network, Play, Pause, Zap, Settings, ChevronDown, RefreshCw } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+const API_URL = "http://127.0.0.1:8000"
 
 export default function ControlPanel({
     interfaceName,
@@ -10,6 +13,32 @@ export default function ControlPanel({
     status
 }) {
     const [packetCount, setPacketCount] = useState(200)
+    const [interfaces, setInterfaces] = useState([])
+    const [loadingInterfaces, setLoadingInterfaces] = useState(false)
+
+    // Arayüzleri yükle
+    const fetchInterfaces = async () => {
+        setLoadingInterfaces(true)
+        try {
+            const res = await axios.get(`${API_URL}/interfaces`)
+            if (res.data.status === "success" && res.data.interfaces) {
+                setInterfaces(res.data.interfaces)
+                // Varsayılan arayüzü ayarla
+                if (res.data.default && !interfaceName) {
+                    setInterfaceName(res.data.default)
+                } else if (res.data.interfaces.length > 0 && !interfaceName) {
+                    setInterfaceName(res.data.interfaces[0])
+                }
+            }
+        } catch (error) {
+            console.error("Arayüzler yüklenemedi:", error)
+        }
+        setLoadingInterfaces(false)
+    }
+
+    useEffect(() => {
+        fetchInterfaces()
+    }, [])
 
     return (
         <div className="glass-card p-8">
@@ -27,19 +56,41 @@ export default function ControlPanel({
             <div className="space-y-8 px-2">
                 {/* Network Interface */}
                 <div className="space-y-3">
-                    <label className="block text-xs text-slate-500 font-medium uppercase tracking-wider">
-                        Ağ Arayüzü
-                    </label>
+                    <div className="flex items-center justify-between">
+                        <label className="block text-xs text-slate-500 font-medium uppercase tracking-wider">
+                            Ağ Arayüzü
+                        </label>
+                        <button
+                            onClick={fetchInterfaces}
+                            disabled={loadingInterfaces}
+                            className="p-1 rounded hover:bg-slate-700/50 transition-colors"
+                            title="Arayüzleri yenile"
+                        >
+                            <RefreshCw className={`w-3 h-3 text-slate-500 ${loadingInterfaces ? 'animate-spin' : ''}`} />
+                        </button>
+                    </div>
                     <div className="relative">
                         <Network className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
-                        <input
-                            type="text"
+                        <select
                             value={interfaceName}
                             onChange={(e) => setInterfaceName(e.target.value)}
-                            className="input pl-12 py-3.5 font-mono text-sm"
-                            placeholder="Wi-Fi, Ethernet..."
-                        />
+                            className="input pl-12 pr-10 py-3.5 font-mono text-sm appearance-none cursor-pointer w-full"
+                        >
+                            {interfaces.length === 0 ? (
+                                <option value="">Yükleniyor...</option>
+                            ) : (
+                                interfaces.map((iface) => (
+                                    <option key={iface} value={iface}>
+                                        {iface}
+                                    </option>
+                                ))
+                            )}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
                     </div>
+                    {interfaces.length === 0 && !loadingInterfaces && (
+                        <p className="text-xs text-red-400">Ağ arayüzü bulunamadı!</p>
+                    )}
                 </div>
 
                 {/* Packet Count Slider */}
@@ -128,8 +179,8 @@ export default function ControlPanel({
 
                     {/* Status Box */}
                     <div className={`flex items-center gap-3 px-5 py-4 rounded-xl text-sm font-medium animate-fade-in ${status === 'scanning'
-                            ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
-                            : 'bg-green-500/10 text-green-400 border border-green-500/20'
+                        ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+                        : 'bg-green-500/10 text-green-400 border border-green-500/20'
                         }`}>
                         <span className={`w-3 h-3 rounded-full flex-shrink-0 ${status === 'scanning' ? 'bg-yellow-400 animate-pulse' : 'bg-green-400'
                             }`}></span>

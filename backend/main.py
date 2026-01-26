@@ -1,10 +1,11 @@
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from src.capture import start_sniffer
 from src.analysis import detect_anomalies
 import pandas as pd
 import os
 import uvicorn
+import asyncio
 
 # Windows'ta okunabilir arayüz isimleri için
 try:
@@ -35,6 +36,29 @@ STATE = {
     "last_analysis": [],
     "error": None
 }
+
+# --- WEBSOCKET YÖNETİCİSİ ---
+class ConnectionManager:
+    """WebSocket bağlantılarını yöneten sınıf"""
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+    
+    async def connect(self, websocket: WebSocket):
+        """Yeni bir WebSocket bağlantısını kabul eder ve listeye ekler"""
+        await websocket.accept()
+        self.active_connections.append(websocket)
+    
+    def disconnect(self, websocket: WebSocket):
+        """Bir WebSocket bağlantısını listeden çıkarır"""
+        self.active_connections.remove(websocket)
+    
+    async def broadcast(self, message: dict):
+        """Tüm bağlı kullanıcılara mesaj gönderir"""
+        for connection in self.active_connections:
+            await connection.send_json(message)
+
+# ConnectionManager nesnesi
+manager = ConnectionManager()
 
 # Arayüz isim eşleştirmesi (GUID -> Okunabilir isim)
 INTERFACE_MAP = {}
@@ -118,7 +142,7 @@ def list_interfaces():
         }
 
 @app.post("/start/{interface}")
-def start_scan(interface: str, packet_count: int = 500, background_tasks: BackgroundTasks = None):
+async def start_scan(interface: str, packet_count: int = 500, background_tasks: BackgroundTasks = None):
     """
     Arka planda ağ dinlemeyi başlatır.
     """
@@ -142,6 +166,12 @@ def start_scan(interface: str, packet_count: int = 500, background_tasks: Backgr
 
     STATE["is_running"] = True
     STATE["error"] = None
+    
+    # WebSocket üzerinden tarama başladığını bildir
+    await manager.broadcast({"type": "status", "message": "scanning"})
+    
+    # Event loop'u al (thread-safe broadcast için)
+    loop = asyncio.get_event_loop()
     
     # Arka plan görevi (Sniffing işlemi API'yi kilitlemesin diye)
     def scan_task():
@@ -170,6 +200,26 @@ def start_scan(interface: str, packet_count: int = 500, background_tasks: Backgr
         
         STATE["is_running"] = False
         print("[*] Islem tamamlandi.")
+        
+        # Thread-safe WebSocket broadcast
+        try:
+            if STATE["error"]:
+                # Hata mesajı gönder
+                asyncio.run_coroutine_threadsafe(
+                    manager.broadcast({"type": "error", "message": STATE["error"]}),
+                    loop
+                )
+            else:
+                # Başarılı sonuç gönder
+                asyncio.run_coroutine_threadsafe(
+                    manager.broadcast({
+                        "type": "new_data",
+                        "data": STATE["last_analysis"]
+                    }),
+                    loop
+                )
+        except Exception as e:
+            print(f"[!] WebSocket broadcast hatası: {e}")
 
     background_tasks.add_task(scan_task)
     return {"status": "started", "message": f"{interface} uzerinde dinleme baslatildi"}
@@ -195,6 +245,24 @@ def get_results():
         "data": STATE["last_analysis"],
         "error": None
     }
+
+# --- WEBSOCKET ENDPOINT ---
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """
+    WebSocket bağlantısını yönetir.
+    Gerçek zamanlı durum güncellemeleri için kullanılır.
+    """
+    await manager.connect(websocket)
+    try:
+        while True:
+            # Mesaj bekle
+            data = await websocket.receive_text()
+            # Ping-pong kontrolü
+            if data == "ping":
+                await websocket.send_text("pong")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
 
 # Doğrudan çalıştırma için
 if __name__ == "__main__":

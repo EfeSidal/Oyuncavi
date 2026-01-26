@@ -19,6 +19,9 @@ import GameServices from './components/GameServices'
 import { useAlerts } from './context/AlertContext'
 import { useSettings } from './context/SettingsContext'
 
+// Hooks
+import { useGameSocket } from './hooks/useGameSocket'
+
 // Backend URL
 const API_URL = "http://127.0.0.1:8000"
 
@@ -61,63 +64,61 @@ function App() {
   const [status, setStatus] = useState("idle")
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
-  const [isConnected, setIsConnected] = useState(true)
 
   const { addAlert } = useAlerts()
   const { settings } = useSettings()
 
-  // Check backend connection
+  // WebSocket bağlantısı
+  const { isConnected, lastMessage } = useGameSocket()
+
+  // Socket mesajlarını dinle
   useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        await axios.get(`${API_URL}/`)
-        setIsConnected(true)
-      } catch {
-        setIsConnected(false)
+    if (!lastMessage) return
+
+    // Status mesajları
+    if (lastMessage.type === "status") {
+      if (lastMessage.message === "scanning") {
+        setLoading(true)
+        setStatus("scanning")
+      } else if (lastMessage.message === "completed") {
+        setLoading(false)
+        setStatus("completed")
       }
     }
-    checkConnection()
-    const interval = setInterval(checkConnection, 10000)
-    return () => clearInterval(interval)
-  }, [])
 
-  // Polling for results
-  useEffect(() => {
-    let interval
-    if (status === "scanning") {
-      interval = setInterval(async () => {
-        try {
-          const res = await axios.get(`${API_URL}/results`)
-          if (res.data.status === "completed" || (res.data.data && res.data.data.length > 0)) {
-            setData(res.data.data)
-            if (res.data.status === "completed") {
-              setStatus("completed")
-              setLoading(false)
-              clearInterval(interval)
+    // Yeni veri mesajları
+    if (lastMessage.type === "new_data" && lastMessage.data) {
+      setData(lastMessage.data)
+      setLoading(false)
+      setStatus("completed")
 
-              // Alert on completion
-              const anomalyCount = res.data.data.filter(d => d.anomaly === -1).length
-              if (anomalyCount > 0) {
-                addAlert({
-                  type: 'threat',
-                  message: `Tarama tamamlandı: ${anomalyCount} tehdit tespit edildi!`,
-                  playSound: settings.soundEnabled
-                })
-              } else {
-                addAlert({
-                  type: 'success',
-                  message: 'Tarama tamamlandı: Tehdit bulunamadı.'
-                })
-              }
-            }
-          }
-        } catch (error) {
-          console.error("Backend error:", error)
-        }
-      }, 2000)
+      // Alert on completion
+      const anomalyCount = lastMessage.data.filter(d => d.anomaly === -1).length
+      if (anomalyCount > 0) {
+        addAlert({
+          type: 'threat',
+          message: `Tarama tamamlandı: ${anomalyCount} tehdit tespit edildi!`,
+          playSound: settings.soundEnabled
+        })
+      } else {
+        addAlert({
+          type: 'success',
+          message: 'Tarama tamamlandı: Tehdit bulunamadı.'
+        })
+      }
     }
-    return () => clearInterval(interval)
-  }, [status, addAlert, settings.soundEnabled])
+
+    // Hata mesajları
+    if (lastMessage.type === "error") {
+      setLoading(false)
+      setStatus("idle")
+      addAlert({
+        type: 'threat',
+        message: lastMessage.message || 'Bir hata oluştu',
+        playSound: true
+      })
+    }
+  }, [lastMessage, addAlert, settings.soundEnabled])
 
   const startScan = async (packetCount = 200) => {
     setLoading(true)
@@ -128,7 +129,19 @@ function App() {
       message: `Tarama başlatıldı: ${interfaceName} üzerinde ${packetCount} paket`
     })
     try {
-      await axios.post(`${API_URL}/start/${interfaceName}?packet_count=${packetCount}`)
+      const res = await axios.post(`${API_URL}/start/${interfaceName}?packet_count=${packetCount}`)
+
+      // API'den hata dönerse
+      if (res.data.status === "error") {
+        addAlert({
+          type: 'threat',
+          message: res.data.message || 'Ağ arayüzü bulunamadı!',
+          playSound: true
+        })
+        setLoading(false)
+        setStatus("idle")
+        return
+      }
     } catch (error) {
       addAlert({
         type: 'threat',
