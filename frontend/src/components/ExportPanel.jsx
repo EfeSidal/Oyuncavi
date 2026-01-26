@@ -51,7 +51,7 @@ export default function ExportPanel({ data = [], anomalies = [] }) {
     return (
         <div className="glass-card p-6">
             {/* Header */}
-            <div className="flex items-center gap-3 mb-5 px-1">
+            <div className="flex items-center gap-2 mb-8 px-1">
                 <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 flex-shrink-0">
                     <Download className="w-5 h-5 text-purple-400" />
                 </div>
@@ -61,7 +61,7 @@ export default function ExportPanel({ data = [], anomalies = [] }) {
             </div>
 
             {/* Export Buttons */}
-            <div className="grid grid-cols-2 gap-3 px-1">
+            <div className="grid grid-cols-2 gap-3 px-1" style={{ marginTop: '8px' }}>
                 <button
                     onClick={exportJSON}
                     disabled={data.length === 0}

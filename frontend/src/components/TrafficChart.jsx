@@ -168,7 +168,7 @@ export default function TrafficChart({ data = [], anomalies = [] }) {
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-xs text-cyan-400">E</span>
+                            <span className="text-xs text-cyan-400">A</span>
                         </div>
                         <div>
                             <p className="text-lg font-bold font-mono text-cyan-400 tabular-nums">{avgSize} B</p>
@@ -177,7 +177,7 @@ export default function TrafficChart({ data = [], anomalies = [] }) {
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
-                            <Zap className="w-3.5 h-3.5 text-purple-400" />
+                            <span className="text-xs text-purple-400">M</span>
                         </div>
                         <div>
                             <p className="text-lg font-bold font-mono text-purple-400 tabular-nums">{maxSize} B</p>
