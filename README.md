@@ -1,4 +1,3 @@
-
 # 🛡️ OyuncuAvi (GamerHunt)
 ### 🎮 Çevrim İçi Oyunlar İçin Yapay Zeka Destekli Ağ Tehdit Analizi
 
@@ -57,16 +56,20 @@ Detaylı kurulum için lütfen **[📖 Kullanım Rehberi (User Guide)](User_Guid
 pip install -r requirements.txt
 
 # Npcap sürücüsünü yükle (Windows için şart)
-# https://npcap.com/ adresinden indirin
+# [https://npcap.com/](https://npcap.com/) adresinden indirin
+
 ```
 
 #### 2. Frontend Kurulumu
+
 ```bash
 cd frontend
 npm install
+
 ```
 
 #### 3. Uygulamayı Başlat
+
 ```bash
 # Terminal 1 - Backend (Yönetici olarak)
 cd backend
@@ -75,11 +78,14 @@ python main.py
 # Terminal 2 - Frontend
 cd frontend
 npm run dev
+
 ```
 
 #### 4. Tarayıcıda Aç
+
 ```
 http://localhost:5173
+
 ```
 
 ---
@@ -89,31 +95,52 @@ http://localhost:5173
 ```
 OyuncuAvi/
 ├── backend/
-│   ├── main.py           # FastAPI sunucusu
-│   └── data/
-│       ├── captures/     # Yakalanan paket dosyaları (.pcap)
-│       └── processed/    # İşlenmiş analiz dosyaları
-├── frontend/
+│   ├── main.py             # FastAPI sunucusu
+│   ├── generate_sample.py  # Örnek veri oluşturucu
+│   ├── requirements.txt    # Python bağımlılıkları
 │   ├── src/
-│   │   ├── App.jsx       # Ana React bileşeni
-│   │   ├── components/   # UI bileşenleri
-│   │   │   ├── Header.jsx
-│   │   │   ├── KpiCard.jsx
-│   │   │   ├── TrafficChart.jsx
-│   │   │   ├── ThreatTable.jsx
-│   │   │   ├── ControlPanel.jsx
-│   │   │   ├── AlertPanel.jsx
-│   │   │   ├── SettingsPanel.jsx
-│   │   │   └── ...
-│   │   ├── context/      # React Context providers
-│   │   └── utils/        # Yardımcı fonksiyonlar
-│   └── package.json
-├── src/
-│   ├── analysis.py       # AI ve Anomali tespiti (Isolation Forest)
-│   ├── capture.py        # Scapy ile ağ dinleme modülü
-│   └── utils.py          # IP ve Blacklist işlemleri
+│   │   ├── analysis.py     # AI ve Anomali tespiti (Isolation Forest)
+│   │   ├── capture.py      # Scapy ile ağ dinleme modülü
+│   │   ├── utils.py        # Yardımcı fonksiyonlar
+│   │   └── visualize.py    # Görselleştirme modülü
+│   └── threat_intel/
+│       └── blacklist.txt   # Tehdit istihbarat verileri
+├── frontend/
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   ├── public/
+│   └── src/
+│       ├── main.jsx
+│       ├── App.jsx         # Ana React bileşeni
+│       ├── components/     # UI Bileşenleri
+│       │   ├── Header.jsx
+│       │   ├── KpiCard.jsx
+│       │   ├── TrafficChart.jsx
+│       │   ├── PortChart.jsx
+│       │   ├── ProtocolChart.jsx
+│       │   ├── ThreatTable.jsx
+│       │   ├── TopTalkers.jsx
+│       │   ├── ControlPanel.jsx
+│       │   ├── AlertPanel.jsx
+│       │   ├── SettingsPanel.jsx
+│       │   ├── ExportPanel.jsx
+│       │   ├── GameServices.jsx
+│       │   └── StatsBar.jsx
+│       ├── context/        # React Context (State Yönetimi)
+│       │   ├── AlertContext.jsx
+│       │   ├── SettingsContext.jsx
+│       │   └── ThemeContext.jsx
+│       ├── hooks/
+│       │   └── useGameSocket.js
+│       └── utils/
+│           └── gameServices.js
 ├── README.md
-└── User_Guide.md
+├── User_Guide.md
+├── ROADMAP.md
+├── STEPS.md
+└── LICENSE
+
 ```
 
 ---
