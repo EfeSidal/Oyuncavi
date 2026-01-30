@@ -4,6 +4,16 @@ from scapy.all import rdpcap, IP, TCP, UDP
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 
+# LSTM detector import (lazy loading to avoid TensorFlow overhead)
+_lstm_detector_module = None
+
+# SNI extractor for HTTPS traffic verification
+try:
+    from src.sni_extractor import extract_sni_from_packets, verify_service_by_sni
+    SNI_EXTRACTION_ENABLED = True
+except ImportError:
+    SNI_EXTRACTION_ENABLED = False
+
 def extract_features(pcap_file):
     """
     PCAP dosyasından gelişmiş özellikler (ETA - Encrypted Traffic Analysis) çıkarır.
@@ -16,6 +26,14 @@ def extract_features(pcap_file):
         scapy_packets = rdpcap(pcap_file)
     except Exception as e:
         return pd.DataFrame() # Boş dönerse dashboard hata vermez, uyarı verir.
+
+    # Build SNI cache for HTTPS verification
+    sni_cache = {}
+    if SNI_EXTRACTION_ENABLED:
+        try:
+            sni_cache = extract_sni_from_packets(scapy_packets)
+        except Exception as e:
+            print(f"[!] SNI extraction failed: {e}")
 
     for pkt in scapy_packets:
         if IP in pkt:
@@ -35,6 +53,11 @@ def extract_features(pcap_file):
                 sport = pkt[UDP].sport
                 dport = pkt[UDP].dport
             
+            # Get SNI for HTTPS connections
+            sni = None
+            if dport == 443 or dport == 8443:
+                sni = sni_cache.get((dst, dport))
+            
             packets.append({
                 'src_ip': src,
                 'dst_ip': dst,
@@ -42,7 +65,8 @@ def extract_features(pcap_file):
                 'dst_port': dport,
                 'protocol': proto,
                 'length': length,
-                'time': time
+                'time': time,
+                'sni': sni
             })
 
     df = pd.DataFrame(packets)
@@ -97,3 +121,45 @@ def detect_anomalies(pcap_file):
     df['anomaly'] = model.fit_predict(X)
 
     return df
+
+
+def detect_anomalies_lstm(pcap_file, sequence_length=20, threshold=0.7):
+    """
+    LSTM tabanlı anomali tespiti yapar.
+    Speedhack ve lag switch gibi zamanlama manipülasyonlarını tespit eder.
+    
+    Args:
+        pcap_file: PCAP dosya yolu
+        sequence_length: Her analiz penceresindeki paket sayısı
+        threshold: Anomali sınıflandırma eşiği (0.0 - 1.0)
+        
+    Returns:
+        DataFrame with 'suspicion_score' (0.0 - 1.0) ve 'lstm_anomaly' sütunları
+    """
+    global _lstm_detector_module
+    
+    # Lazy load to avoid TensorFlow overhead on import
+    if _lstm_detector_module is None:
+        try:
+            from src import lstm_detector
+            _lstm_detector_module = lstm_detector
+        except ImportError as e:
+            print(f"[!] LSTM modülü yüklenemedi: {e}")
+            print("[*] TensorFlow kurulumu gerekli: pip install tensorflow>=2.10.0")
+            return None
+    
+    df = extract_features(pcap_file)
+    
+    if df is None or df.empty:
+        return None
+    
+    try:
+        detector = _lstm_detector_module.LSTMDetector(
+            sequence_length=sequence_length, 
+            threshold=threshold
+        )
+        result_df = detector.detect(df, train_first=True)
+        return result_df
+    except Exception as e:
+        print(f"[!] LSTM analizi başarısız: {e}")
+        return df
